@@ -1,6 +1,6 @@
 <?php
 
-
+require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 function create_appointments_tables()
 {
     global $wpdb;
@@ -44,7 +44,7 @@ function create_appointments_tables()
     ) $charset_collate;
     ";
 
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
 
     dbDelta($sql_appointments);
     dbDelta($sql_schedules);
