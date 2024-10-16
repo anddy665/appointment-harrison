@@ -50,6 +50,7 @@ function schedules_page_content()
     $table_schedules = $wpdb->prefix . 'schedules';
     $edit_mode = false;
     $schedule_to_edit = null;
+    $plugin_path = plugin_dir_path(__FILE__);
 
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
@@ -64,9 +65,6 @@ function schedules_page_content()
                         ['schedule_date' => $schedule_date, 'start_time' => $start_time, 'end_time' => $end_time],
                         ['id' => $schedule_id]
                     );
-
-
-
 
                     wp_redirect(admin_url('admin.php?page=schedules'));
                 }
@@ -112,5 +110,5 @@ function schedules_page_content()
 
     $schedules = $wpdb->get_results("SELECT * FROM $table_schedules");
 
-    include(plugin_dir_path(__FILE__) . '../templates/schedules-template.php');
+    include($plugin_path . '../templates/schedules-template.php');
 }
