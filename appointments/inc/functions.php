@@ -27,11 +27,13 @@ function create_appointments_tables()
     $sql_schedules = "
     CREATE TABLE $table_schedules (
         id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-        schedule_time datetime NOT NULL,
-        available tinyint(1) NOT NULL DEFAULT 1,
+        schedule_date date NOT NULL,
+        start_time time NOT NULL,
+        end_time time NOT NULL,
         PRIMARY KEY (id)
     ) $charset_collate;
     ";
+
 
     $sql_appointments_schedules = "
     CREATE TABLE $table_appointments_schedules (
