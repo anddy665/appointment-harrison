@@ -51,47 +51,56 @@ function schedules_page_content()
     $schedule_to_edit = null;
 
     if (isset($_POST['action'])) {
-        if ($_POST['action'] == 'edit_schedule' && isset($_POST['schedule_id'])) {
-            $schedule_id = intval($_POST['schedule_id']);
-            $schedule_date = sanitize_text_field($_POST['schedule_date']);
-            $start_time = sanitize_text_field($_POST['start_time']);
-            $end_time = sanitize_text_field($_POST['end_time']);
-            $wpdb->update(
-                $table_schedules,
-                ['schedule_date' => $schedule_date, 'start_time' => $start_time, 'end_time' => $end_time],
-                ['id' => $schedule_id]
-            );
-    ?>
-            <div class="notice notice-success">
-                <p>Schedule updated successfully.</p>
-            </div>
-            <script type="text/javascript">
-                window.location = "<?= esc_url(admin_url('admin.php?page=schedules')) ?>";
-            </script>
-        <?php
-            exit;
-        } elseif ($_POST['action'] == 'create_schedule') {
-            $schedule_date = sanitize_text_field($_POST['schedule_date']);
-            $start_time = sanitize_text_field($_POST['start_time']);
-            $end_time = sanitize_text_field($_POST['end_time']);
-            $wpdb->insert($table_schedules, [
-                'schedule_date' => $schedule_date,
-                'start_time' => $start_time,
-                'end_time' => $end_time
-            ]);
-        ?>
-            <div class="notice notice-success">
-                <p>Schedule created successfully.</p>
-            </div>
-        <?php
-        } elseif ($_POST['action'] == 'delete_schedule' && isset($_POST['schedule_id'])) {
-            $schedule_id = intval($_POST['schedule_id']);
-            $wpdb->delete($table_schedules, ['id' => $schedule_id]);
-        ?>
-            <div class="notice notice-success">
-                <p>Schedule deleted successfully.</p>
-            </div>
+        switch ($_POST['action']) {
+            case 'edit_schedule':
+                if (isset($_POST['schedule_id'])) {
+                    $schedule_id = intval($_POST['schedule_id']);
+                    $schedule_date = sanitize_text_field($_POST['schedule_date']);
+                    $start_time = sanitize_text_field($_POST['start_time']);
+                    $end_time = sanitize_text_field($_POST['end_time']);
+                    $wpdb->update(
+                        $table_schedules,
+                        ['schedule_date' => $schedule_date, 'start_time' => $start_time, 'end_time' => $end_time],
+                        ['id' => $schedule_id]
+                    ); ?>
+                    <div class="notice notice-success">
+                        <p>Schedule updated successfully.</p>
+                    </div>
+                    <script type="text/javascript">
+                        window.location = "<?= esc_url(admin_url('admin.php?page=schedules')) ?>";
+                    </script>
+                <?php
+                    exit;
+                }
+                break;
+
+            case 'create_schedule':
+                $schedule_date = sanitize_text_field($_POST['schedule_date']);
+                $start_time = sanitize_text_field($_POST['start_time']);
+                $end_time = sanitize_text_field($_POST['end_time']);
+                $wpdb->insert($table_schedules, [
+                    'schedule_date' => $schedule_date,
+                    'start_time' => $start_time,
+                    'end_time' => $end_time
+                ]);
+                ?>
+                <div class="notice notice-success">
+                    <p>Schedule created successfully.</p>
+                </div>
+                <?php
+                break;
+
+            case 'delete_schedule':
+                if (isset($_POST['schedule_id'])) {
+                    $schedule_id = intval($_POST['schedule_id']);
+                    $wpdb->delete($table_schedules, ['id' => $schedule_id]);
+                ?>
+                    <div class="notice notice-success">
+                        <p>Schedule deleted successfully.</p>
+                    </div>
 <?php
+                }
+                break;
         }
     }
 
