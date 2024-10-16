@@ -40,8 +40,8 @@
                     <tr>
                         <td><?= intval($schedule->id); ?></td>
                         <td><?= esc_html($schedule->schedule_date); ?></td>
-                        <td><?= esc_html($schedule->start_time); ?></td>
-                        <td><?= esc_html($schedule->end_time); ?></td>
+                        <td><?= esc_html(date('h:i A', strtotime($schedule->start_time))); ?></td>
+                        <td><?= esc_html(date('h:i A', strtotime($schedule->end_time))); ?></td>
                         <td>
                             <form method="POST" style="display:inline-block;">
                                 <input type="hidden" name="action" value="delete_schedule">
