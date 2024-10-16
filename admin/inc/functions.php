@@ -107,6 +107,3 @@ function schedules_page_content()
 
     include(plugin_dir_path(__FILE__) . '../templates/schedules-template.php');
 }
-
-
-

@@ -24,6 +24,3 @@ require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/appointments-functions
 
 register_activation_hook(__FILE__, 'create_appointments_tables');
 register_deactivation_hook(__FILE__, 'drop_appointments_tables');
-
-
-
