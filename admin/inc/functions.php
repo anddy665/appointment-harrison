@@ -43,6 +43,7 @@ function appointments_page_content()
     <?php
 }
 
+
 function schedules_page_content()
 {
     global $wpdb;
@@ -62,15 +63,12 @@ function schedules_page_content()
                         $table_schedules,
                         ['schedule_date' => $schedule_date, 'start_time' => $start_time, 'end_time' => $end_time],
                         ['id' => $schedule_id]
-                    ); ?>
-                    <div class="notice notice-success">
-                        <p>Schedule updated successfully.</p>
-                    </div>
-                    <script type="text/javascript">
-                        window.location = "<?= esc_url(admin_url('admin.php?page=schedules')) ?>";
-                    </script>
-                <?php
-                    exit;
+                    );
+
+
+
+
+                    wp_redirect(admin_url('admin.php?page=schedules'));
                 }
                 break;
 
@@ -83,7 +81,7 @@ function schedules_page_content()
                     'start_time' => $start_time,
                     'end_time' => $end_time
                 ]);
-                ?>
+    ?>
                 <div class="notice notice-success">
                     <p>Schedule created successfully.</p>
                 </div>
