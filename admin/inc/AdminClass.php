@@ -39,14 +39,37 @@ class Admin_Class
         );
     }
 
+    public function show_notice($message, $class = 'notice-success')
+    {
+
+        $template_path = plugin_dir_path(__FILE__) . '../../admin/templates/notice-template.php';
+
+        if (file_exists($template_path)) {
+
+            $message = sanitize_text_field($message);
+            $class = sanitize_html_class($class);
+
+            include $template_path;
+        } else {
+?>
+            <div class="notice notice-error">
+                <p>There has been an error</p>
+            </div>
+        <?php
+
+        }
+    }
+
+
+
     public function appointments_page_content()
     {
-?>
+        ?>
         <div class="wrap">
             <h1>Appointments Page</h1>
             <p>This is where you will manage appointments.</p>
         </div>
-        <?php
+<?php
     }
 
 
@@ -71,8 +94,8 @@ class Admin_Class
                             ['schedule_date' => $schedule_date, 'start_time' => $start_time, 'end_time' => $end_time],
                             ['id' => $schedule_id]
                         );
+                        $this->show_notice('Schedule updated successfully.', 'notice-success');
                         wp_redirect(admin_url('admin.php?page=schedules'));
-                        exit; // Asegúrate de salir después de redirigir
                     }
                     break;
 
@@ -85,22 +108,14 @@ class Admin_Class
                         'start_time' => $start_time,
                         'end_time' => $end_time
                     ]);
-        ?>
-                    <div class="notice notice-success">
-                        <p>Schedule created successfully.</p>
-                    </div>
-                    <?php
+                    $this->show_notice('Schedule created successfully.', 'notice-success');
                     break;
 
                 case 'delete_schedule':
                     if (isset($_POST['schedule_id'])) {
                         $schedule_id = intval($_POST['schedule_id']);
                         $wpdb->delete($table_schedules, ['id' => $schedule_id]);
-                    ?>
-                        <div class="notice notice-success">
-                            <p>Schedule deleted successfully.</p>
-                        </div>
-<?php
+                        $this->show_notice('Schedule deleted successfully.', 'notice-success');
                     }
                     break;
             }
