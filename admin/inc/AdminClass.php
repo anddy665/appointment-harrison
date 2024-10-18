@@ -1,12 +1,15 @@
 <?php
-class Admin_Class {
+class Admin_Class
+{
 
-    public function __construct() {
- 
+    public function __construct()
+    {
+
         add_action('admin_menu', [$this, 'create_admin_menu']);
     }
 
-    public function create_admin_menu() {
+    public function create_admin_menu()
+    {
         add_menu_page(
             'Appointments',
             'Appointments',
@@ -36,11 +39,19 @@ class Admin_Class {
         );
     }
 
-    public function appointments_page_content() {
-        echo '<div class="wrap"><h1>Appointments Page</h1><p>This is where you will manage appointments.</p></div>';
+    public function appointments_page_content()
+    {
+?>
+        <div class="wrap">
+            <h1>Appointments Page</h1>
+            <p>This is where you will manage appointments.</p>
+        </div>
+        <?php
     }
 
-    public function schedules_page_content() {
+
+    public function schedules_page_content()
+    {
         global $wpdb;
         $table_schedules = $wpdb->prefix . 'schedules';
         $edit_mode = false;
@@ -61,6 +72,7 @@ class Admin_Class {
                             ['id' => $schedule_id]
                         );
                         wp_redirect(admin_url('admin.php?page=schedules'));
+                        exit; // Asegúrate de salir después de redirigir
                     }
                     break;
 
@@ -73,14 +85,22 @@ class Admin_Class {
                         'start_time' => $start_time,
                         'end_time' => $end_time
                     ]);
-                    echo '<div class="notice notice-success"><p>Schedule created successfully.</p></div>';
+        ?>
+                    <div class="notice notice-success">
+                        <p>Schedule created successfully.</p>
+                    </div>
+                    <?php
                     break;
 
                 case 'delete_schedule':
                     if (isset($_POST['schedule_id'])) {
                         $schedule_id = intval($_POST['schedule_id']);
                         $wpdb->delete($table_schedules, ['id' => $schedule_id]);
-                        echo '<div class="notice notice-success"><p>Schedule deleted successfully.</p></div>';
+                    ?>
+                        <div class="notice notice-success">
+                            <p>Schedule deleted successfully.</p>
+                        </div>
+<?php
                     }
                     break;
             }

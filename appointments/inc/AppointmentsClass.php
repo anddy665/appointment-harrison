@@ -1,7 +1,9 @@
 <?php
-class Appointments_Class {
+class Appointments_Class
+{
 
-    public static function create_tables() {
+    public static function create_tables()
+    {
         global $wpdb;
 
         $table_appointments = $wpdb->prefix . 'appointments';
@@ -49,7 +51,8 @@ class Appointments_Class {
         dbDelta($sql_appointments_schedules);
     }
 
-    public static function drop_tables() {
+    public static function drop_tables()
+    {
         global $wpdb;
 
         $table_appointments = $wpdb->prefix . 'appointments';
