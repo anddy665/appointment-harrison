@@ -1,7 +1,7 @@
 <div class="wrap">
     <h1>Schedules Page</h1>
 
-    <?php if (!$edit_mode): ?>
+    <?php if (!isset($_GET['action']) || $_GET['action'] !== 'edit'): ?>
         <h2>Add New Schedule</h2>
         <form method="POST">
             <input type="hidden" name="action" value="create_schedule">
@@ -15,7 +15,7 @@
         </form>
     <?php endif; ?>
 
-    <?php if ($edit_mode && $schedule_to_edit): ?>
+    <?php if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($schedule_to_edit)): ?>
         <h2>Edit Schedule</h2>
         <form method="POST">
             <input type="hidden" name="action" value="edit_schedule">
@@ -30,7 +30,6 @@
             <a href="<?= admin_url('admin.php?page=schedules'); ?>" class="button button-secondary">Cancel</a>
         </form>
     <?php endif; ?>
-
 
     <h2>Existing Schedules</h2>
     <?php if (!empty($schedules)): ?>
@@ -70,4 +69,4 @@
             </p>
         </div>
     <?php endif; ?>
-</div> 
+</div>

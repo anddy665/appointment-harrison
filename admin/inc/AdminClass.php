@@ -1,10 +1,8 @@
 <?php
 class Admin_Class
 {
-
     public function __construct()
     {
-
         add_action('admin_menu', [$this, 'create_admin_menu']);
     }
 
@@ -41,7 +39,6 @@ class Admin_Class
 
     public function show_notice($message, $class = 'notice-success')
     {
-
         $template_path = plugin_dir_path(__FILE__) . '../../admin/templates/notice-template.php';
 
         if (file_exists($template_path)) {
@@ -56,11 +53,8 @@ class Admin_Class
                 <p>There has been an error</p>
             </div>
         <?php
-
         }
     }
-
-
 
     public function appointments_page_content()
     {
@@ -72,13 +66,10 @@ class Admin_Class
 <?php
     }
 
-
     public function schedules_page_content()
     {
         global $wpdb;
         $table_schedules = $wpdb->prefix . 'schedules';
-        $edit_mode = false;
-        $schedule_to_edit = null;
         $plugin_path = plugin_dir_path(__FILE__);
 
         if (isset($_POST['action'])) {
@@ -126,7 +117,6 @@ class Admin_Class
             $schedule_to_edit = $wpdb->get_row(
                 $wpdb->prepare("SELECT * FROM $table_schedules WHERE id = %d", $schedule_id)
             );
-            $edit_mode = true;
         }
 
         $schedules = $wpdb->get_results("SELECT * FROM $table_schedules");
