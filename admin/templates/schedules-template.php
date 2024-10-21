@@ -1,6 +1,6 @@
 <div class="wrap">
     <h1>Schedules Page</h1>
-    
+
     <?php if (!$edit_mode): ?>
         <h2>Add New Schedule</h2>
         <form method="POST">
@@ -31,7 +31,7 @@
         </form>
     <?php endif; ?>
 
-    
+
     <h2>Existing Schedules</h2>
     <?php if (!empty($schedules)): ?>
         <table class="wp-list-table widefat fixed striped">
@@ -64,6 +64,10 @@
             </tbody>
         </table>
     <?php else: ?>
-        <p>No schedules available.</p>
+        <div class="notice notice-info" style="padding: 20px; background-color: #f1f8ff; border-left: 4px solid #0073aa; border-radius: 5px;">
+            <p style="margin: 0; font-size: 16px; color: #0073aa;">
+                <strong>No schedules available.</strong>
+            </p>
+        </div>
     <?php endif; ?>
-</div>
+</div> 
