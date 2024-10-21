@@ -42,10 +42,8 @@ class Admin_Class
         $template_path = plugin_dir_path(__FILE__) . '../../admin/templates/notice-template.php';
 
         if (file_exists($template_path)) {
-
             $message = sanitize_text_field($message);
             $class = sanitize_html_class($class);
-
             include $template_path;
         } else {
 ?>
@@ -85,8 +83,12 @@ class Admin_Class
                             ['schedule_date' => $schedule_date, 'start_time' => $start_time, 'end_time' => $end_time],
                             ['id' => $schedule_id]
                         );
-                        $this->show_notice('Schedule updated successfully.', 'notice-success');
-                        wp_redirect(admin_url('admin.php?page=schedules'));
+                        if ($wpdb->last_error) {
+                            $this->show_notice('Failed to update schedule: ' . $wpdb->last_error, 'notice-error');
+                        } else {
+                            $this->show_notice('Schedule updated successfully.', 'notice-success');
+                            wp_redirect(admin_url('admin.php?page=schedules'));
+                        }
                     }
                     break;
 
@@ -99,14 +101,22 @@ class Admin_Class
                         'start_time' => $start_time,
                         'end_time' => $end_time
                     ]);
-                    $this->show_notice('Schedule created successfully.', 'notice-success');
+                    if ($wpdb->last_error) {
+                        $this->show_notice('Failed to create schedule: ' . $wpdb->last_error, 'notice-error');
+                    } else {
+                        $this->show_notice('Schedule created successfully.', 'notice-success');
+                    }
                     break;
 
                 case 'delete_schedule':
                     if (isset($_POST['schedule_id'])) {
                         $schedule_id = intval($_POST['schedule_id']);
                         $wpdb->delete($table_schedules, ['id' => $schedule_id]);
-                        $this->show_notice('Schedule deleted successfully.', 'notice-success');
+                        if ($wpdb->last_error) {
+                            $this->show_notice('Failed to delete schedule: ' . $wpdb->last_error, 'notice-error');
+                        } else {
+                            $this->show_notice('Schedule deleted successfully.', 'notice-success');
+                        }
                     }
                     break;
             }
