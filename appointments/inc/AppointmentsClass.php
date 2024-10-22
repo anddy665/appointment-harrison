@@ -1,5 +1,5 @@
 <?php
-class Appointments_Class
+class AppointmentsClass
 {
 
     public static function create_tables()

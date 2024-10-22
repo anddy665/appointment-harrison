@@ -19,33 +19,27 @@ define('APPOINTMENTS_PLUGIN_URL', plugin_dir_url(__FILE__));
 require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/AdminClass.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/AppointmentsClass.php';
 
-class Appointments_Plugin
+class AppointmentsPlugin
 {
-
     public function __construct()
     {
-
         register_activation_hook(__FILE__, [$this, 'create_appointments_tables']);
         register_deactivation_hook(__FILE__, [$this, 'drop_appointments_tables']);
 
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_scripts']);
 
-
-        new Admin_Class();
+        new AdminClass();
     }
-
 
     public function create_appointments_tables()
     {
-        Appointments_Class::create_tables();
+        AppointmentsClass::create_tables();
     }
-
 
     public function drop_appointments_tables()
     {
-        Appointments_Class::drop_tables();
+        AppointmentsClass::drop_tables();
     }
-
 
     public function enqueue_admin_scripts($hook)
     {
@@ -59,7 +53,6 @@ class Appointments_Plugin
     }
 }
 
-
-if (class_exists('Appointments_Plugin')) {
-    $appointments_plugin = new Appointments_Plugin();
+if (class_exists('AppointmentsPlugin')) {
+    $appointments_plugin = new AppointmentsPlugin();
 }
