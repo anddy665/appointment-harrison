@@ -45,13 +45,7 @@ class AdminClass
             $message = sanitize_text_field($message);
             $class = sanitize_html_class($class);
             include $template_path;
-        } else {
-?>
-            <div class="notice notice-error">
-                <p>There has been an error</p>
-            </div>
-        <?php
-        }
+        } 
     }
 
     public function appointments_page_content()
