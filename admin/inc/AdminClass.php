@@ -37,7 +37,6 @@ class AdminClass
         );
     }
 
-
     public function load_notice_template($template_name, $args = array())
     {
         $template_path = plugin_dir_path(__FILE__) . '../../admin/templates/' . $template_name . '.php';
@@ -51,17 +50,14 @@ class AdminClass
         } 
     }
 
-
     public function show_notice($message, $class = 'notice-success')
     {
-
         $args = array(
             'message' => $message,
             'class' => $class,
         );
         $this->load_notice_template('notice-template', $args);
     }
-
 
     public function appointments_page_content()
     {
@@ -74,23 +70,22 @@ class AdminClass
         }
     }
 
-
-
     public function schedules_page_content()
     {
         global $wpdb;
         $table_schedules = $wpdb->prefix . 'schedules';
         $plugin_path = plugin_dir_path(__FILE__);
 
+        
+        $schedule_id = isset($_POST['schedule_id']) ? intval($_POST['schedule_id']) : null;
+        $schedule_date = isset($_POST['schedule_date']) ? sanitize_text_field($_POST['schedule_date']) : null;
+        $start_time = isset($_POST['start_time']) ? sanitize_text_field($_POST['start_time']) : null;
+        $end_time = isset($_POST['end_time']) ? sanitize_text_field($_POST['end_time']) : null;
 
         if (isset($_POST['action'])) {
             switch ($_POST['action']) {
                 case 'edit_schedule':
-                    if (isset($_POST['schedule_id']) && isset($_POST['edit_schedule_nonce_field']) && wp_verify_nonce($_POST['edit_schedule_nonce_field'], 'edit_schedule_nonce')) {
-                        $schedule_id = intval($_POST['schedule_id']);
-                        $schedule_date = sanitize_text_field($_POST['schedule_date']);
-                        $start_time = sanitize_text_field($_POST['start_time']);
-                        $end_time = sanitize_text_field($_POST['end_time']);
+                    if ($schedule_id && isset($_POST['edit_schedule_nonce_field']) && wp_verify_nonce($_POST['edit_schedule_nonce_field'], 'edit_schedule_nonce')) {
                         $wpdb->update(
                             $table_schedules,
                             ['schedule_date' => $schedule_date, 'start_time' => $start_time, 'end_time' => $end_time],
@@ -106,12 +101,9 @@ class AdminClass
                         $this->show_notice('Security check failed.', 'notice-error');
                     }
                     break;
-        
+
                 case 'create_schedule':
                     if (isset($_POST['create_schedule_nonce_field']) && wp_verify_nonce($_POST['create_schedule_nonce_field'], 'create_schedule_nonce')) {
-                        $schedule_date = sanitize_text_field($_POST['schedule_date']);
-                        $start_time = sanitize_text_field($_POST['start_time']);
-                        $end_time = sanitize_text_field($_POST['end_time']);
                         $wpdb->insert($table_schedules, [
                             'schedule_date' => $schedule_date,
                             'start_time' => $start_time,
@@ -126,10 +118,9 @@ class AdminClass
                         $this->show_notice('Security check failed.', 'notice-error');
                     }
                     break;
-        
+
                 case 'delete_schedule':
-                    if (isset($_POST['schedule_id']) && isset($_POST['delete_schedule_nonce_field']) && wp_verify_nonce($_POST['delete_schedule_nonce_field'], 'delete_schedule_nonce')) {
-                        $schedule_id = intval($_POST['schedule_id']);
+                    if ($schedule_id && isset($_POST['delete_schedule_nonce_field']) && wp_verify_nonce($_POST['delete_schedule_nonce_field'], 'delete_schedule_nonce')) {
                         $wpdb->delete($table_schedules, ['id' => $schedule_id]);
                         if ($wpdb->last_error) {
                             $this->show_notice('Failed to delete schedule: ' . $wpdb->last_error, 'notice-error');
@@ -142,8 +133,6 @@ class AdminClass
                     break;
             }
         }
-        
-
 
         if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['schedule_id'])) {
             $schedule_id = intval($_GET['schedule_id']);
@@ -152,9 +141,7 @@ class AdminClass
             );
         }
 
-
         $schedules = $wpdb->get_results("SELECT * FROM $table_schedules");
-
 
         include($plugin_path . '../templates/schedules-template.php');
     }
