@@ -1,5 +1,5 @@
 <?php
-class AppointmentsClass
+class AppointmentsDatabaseHandler
 {
 
     public static function create_tables()

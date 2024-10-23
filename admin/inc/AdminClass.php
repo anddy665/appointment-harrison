@@ -47,7 +47,7 @@ class AdminClass
                 extract($args);
             }
             include $template_path;
-        } 
+        }
     }
 
     public function show_notice($message, $class = 'notice-success')
@@ -76,7 +76,7 @@ class AdminClass
         $table_schedules = $wpdb->prefix . 'schedules';
         $plugin_path = plugin_dir_path(__FILE__);
 
-        
+
         $schedule_id = isset($_POST['schedule_id']) ? intval($_POST['schedule_id']) : null;
         $schedule_date = isset($_POST['schedule_date']) ? sanitize_text_field($_POST['schedule_date']) : null;
         $start_time = isset($_POST['start_time']) ? sanitize_text_field($_POST['start_time']) : null;

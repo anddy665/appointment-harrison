@@ -33,12 +33,12 @@ class AppointmentsPlugin
 
     public function create_appointments_tables()
     {
-        AppointmentsClass::create_tables();
+        AppointmentsDatabaseHandler::create_tables();
     }
 
     public function drop_appointments_tables()
     {
-        AppointmentsClass::drop_tables();
+        AppointmentsDatabaseHandler::drop_tables();
     }
 
     public function enqueue_admin_scripts($hook)
