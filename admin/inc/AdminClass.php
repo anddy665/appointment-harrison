@@ -1,8 +1,12 @@
 <?php
+
 class AdminClass
 {
-    public function __construct()
+    private $dbHandler;
+
+    public function __construct(AppointmentsDatabaseInterface $dbHandler)
     {
+        $this->dbHandler = $dbHandler;
         add_action('admin_menu', [$this, 'create_admin_menu']);
     }
 
@@ -42,7 +46,6 @@ class AdminClass
         $template_path = plugin_dir_path(__FILE__) . '../../admin/templates/' . $template_name . '.php';
 
         if (file_exists($template_path)) {
-
             if (!empty($args) && is_array($args)) {
                 extract($args);
             }
@@ -75,7 +78,6 @@ class AdminClass
         global $wpdb;
         $table_schedules = $wpdb->prefix . 'schedules';
         $plugin_path = plugin_dir_path(__FILE__);
-
 
         $schedule_id = isset($_POST['schedule_id']) ? intval($_POST['schedule_id']) : null;
         $schedule_date = isset($_POST['schedule_date']) ? sanitize_text_field($_POST['schedule_date']) : null;

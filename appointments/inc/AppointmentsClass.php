@@ -1,8 +1,14 @@
 <?php
-class AppointmentsDatabaseHandler
-{
 
-    public static function create_tables()
+interface AppointmentsDatabaseInterface
+{
+    public function create_tables();
+    public function drop_tables();
+}
+
+class AppointmentsDatabaseHandler implements AppointmentsDatabaseInterface
+{
+    public function create_tables()
     {
         global $wpdb;
 
@@ -51,7 +57,7 @@ class AppointmentsDatabaseHandler
         dbDelta($sql_appointments_schedules);
     }
 
-    public static function drop_tables()
+    public function drop_tables()
     {
         global $wpdb;
 
