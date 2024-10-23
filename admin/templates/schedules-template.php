@@ -4,6 +4,7 @@
     <?php if (!isset($_GET['action']) || $_GET['action'] !== 'edit'): ?>
         <h2>Add New Schedule</h2>
         <form method="POST">
+            <?php wp_nonce_field('create_schedule_nonce', 'create_schedule_nonce_field'); ?>
             <input type="hidden" name="action" value="create_schedule">
             <label for="schedule_date">Date:</label>
             <input type="date" name="schedule_date" required>
@@ -18,6 +19,7 @@
     <?php if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($schedule_to_edit)): ?>
         <h2>Edit Schedule</h2>
         <form method="POST">
+            <?php wp_nonce_field('edit_schedule_nonce', 'edit_schedule_nonce_field'); ?>
             <input type="hidden" name="action" value="edit_schedule">
             <input type="hidden" name="schedule_id" value="<?= intval($schedule_to_edit->id); ?>">
             <label for="schedule_date">Date:</label>
@@ -53,6 +55,7 @@
                         <td>
                             <a href="?page=schedules&action=edit&schedule_id=<?= intval($schedule->id); ?>" class="button button-primary">Edit</a>
                             <form method="POST" style="display:inline-block;">
+                                <?php wp_nonce_field('delete_schedule_nonce', 'delete_schedule_nonce_field'); ?>
                                 <input type="hidden" name="action" value="delete_schedule">
                                 <input type="hidden" name="schedule_id" value="<?= intval($schedule->id); ?>">
                                 <button type="submit" class="button button-secondary">Delete</button>

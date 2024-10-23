@@ -86,7 +86,7 @@ class AdminClass
         if (isset($_POST['action'])) {
             switch ($_POST['action']) {
                 case 'edit_schedule':
-                    if (isset($_POST['schedule_id'])) {
+                    if (isset($_POST['schedule_id']) && isset($_POST['edit_schedule_nonce_field']) && wp_verify_nonce($_POST['edit_schedule_nonce_field'], 'edit_schedule_nonce')) {
                         $schedule_id = intval($_POST['schedule_id']);
                         $schedule_date = sanitize_text_field($_POST['schedule_date']);
                         $start_time = sanitize_text_field($_POST['start_time']);
@@ -102,27 +102,33 @@ class AdminClass
                             $this->show_notice('Schedule updated successfully.', 'notice-success');
                             wp_redirect(admin_url('admin.php?page=schedules'));
                         }
-                    }
-                    break;
-
-                case 'create_schedule':
-                    $schedule_date = sanitize_text_field($_POST['schedule_date']);
-                    $start_time = sanitize_text_field($_POST['start_time']);
-                    $end_time = sanitize_text_field($_POST['end_time']);
-                    $wpdb->insert($table_schedules, [
-                        'schedule_date' => $schedule_date,
-                        'start_time' => $start_time,
-                        'end_time' => $end_time
-                    ]);
-                    if ($wpdb->last_error) {
-                        $this->show_notice('Failed to create schedule: ' . $wpdb->last_error, 'notice-error');
                     } else {
-                        $this->show_notice('Schedule created successfully.', 'notice-success');
+                        $this->show_notice('Security check failed.', 'notice-error');
                     }
                     break;
-
+        
+                case 'create_schedule':
+                    if (isset($_POST['create_schedule_nonce_field']) && wp_verify_nonce($_POST['create_schedule_nonce_field'], 'create_schedule_nonce')) {
+                        $schedule_date = sanitize_text_field($_POST['schedule_date']);
+                        $start_time = sanitize_text_field($_POST['start_time']);
+                        $end_time = sanitize_text_field($_POST['end_time']);
+                        $wpdb->insert($table_schedules, [
+                            'schedule_date' => $schedule_date,
+                            'start_time' => $start_time,
+                            'end_time' => $end_time
+                        ]);
+                        if ($wpdb->last_error) {
+                            $this->show_notice('Failed to create schedule: ' . $wpdb->last_error, 'notice-error');
+                        } else {
+                            $this->show_notice('Schedule created successfully.', 'notice-success');
+                        }
+                    } else {
+                        $this->show_notice('Security check failed.', 'notice-error');
+                    }
+                    break;
+        
                 case 'delete_schedule':
-                    if (isset($_POST['schedule_id'])) {
+                    if (isset($_POST['schedule_id']) && isset($_POST['delete_schedule_nonce_field']) && wp_verify_nonce($_POST['delete_schedule_nonce_field'], 'delete_schedule_nonce')) {
                         $schedule_id = intval($_POST['schedule_id']);
                         $wpdb->delete($table_schedules, ['id' => $schedule_id]);
                         if ($wpdb->last_error) {
@@ -130,10 +136,13 @@ class AdminClass
                         } else {
                             $this->show_notice('Schedule deleted successfully.', 'notice-success');
                         }
+                    } else {
+                        $this->show_notice('Security check failed.', 'notice-error');
                     }
                     break;
             }
         }
+        
 
 
         if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['schedule_id'])) {
