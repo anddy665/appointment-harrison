@@ -37,32 +37,51 @@ class AdminClass
         );
     }
 
-    public function show_notice($message, $class = 'notice-success')
+
+    public function load_notice_template($template_name, $args = array())
     {
-        $template_path = plugin_dir_path(__FILE__) . '../../admin/templates/notice-template.php';
+        $template_path = plugin_dir_path(__FILE__) . '../../admin/templates/' . $template_name . '.php';
 
         if (file_exists($template_path)) {
-            $message = sanitize_text_field($message);
-            $class = sanitize_html_class($class);
+
+            if (!empty($args) && is_array($args)) {
+                extract($args);
+            }
             include $template_path;
         } 
     }
 
+
+    public function show_notice($message, $class = 'notice-success')
+    {
+
+        $args = array(
+            'message' => $message,
+            'class' => $class,
+        );
+        $this->load_notice_template('notice-template', $args);
+    }
+
+
     public function appointments_page_content()
     {
-        ?>
-        <div class="wrap">
-            <h1>Appointments Page</h1>
-            <p>This is where you will manage appointments.</p>
-        </div>
-<?php
+        $template_path = plugin_dir_path(__FILE__) . '../../admin/templates/appointments-page.php';
+
+        if (file_exists($template_path)) {
+            include $template_path;
+        } else {
+            echo '<div class="notice notice-error"><p>' . esc_html__('Template not found:', 'appointment-harrison') . '</p></div>';
+        }
     }
+
+
 
     public function schedules_page_content()
     {
         global $wpdb;
         $table_schedules = $wpdb->prefix . 'schedules';
         $plugin_path = plugin_dir_path(__FILE__);
+
 
         if (isset($_POST['action'])) {
             switch ($_POST['action']) {
@@ -116,6 +135,7 @@ class AdminClass
             }
         }
 
+
         if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['schedule_id'])) {
             $schedule_id = intval($_GET['schedule_id']);
             $schedule_to_edit = $wpdb->get_row(
@@ -123,7 +143,9 @@ class AdminClass
             );
         }
 
+
         $schedules = $wpdb->get_results("SELECT * FROM $table_schedules");
+
 
         include($plugin_path . '../templates/schedules-template.php');
     }
