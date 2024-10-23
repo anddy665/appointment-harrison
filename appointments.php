@@ -30,7 +30,7 @@ class AppointmentsPlugin
 
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_scripts']);
 
-        // Inyectar la dependencia
+       
         new AdminClass($this->dbHandler);
     }
 
@@ -46,11 +46,9 @@ class AppointmentsPlugin
 
     public function enqueue_admin_scripts($hook)
     {
-        if ($hook != 'toplevel_page_appointments') {
-            return;
-        }
+        
         wp_enqueue_style('appointments-admin-style', APPOINTMENTS_PLUGIN_URL . 'admin/assets/style.css');
-        wp_enqueue_script('appointments-admin-script', APPOINTMENTS_PLUGIN_URL . 'admin/assets/script.js', array('jquery'), null, true);
+        wp_enqueue_script('appointments-admin-script', APPOINTMENTS_PLUGIN_URL . 'admin/assets/js/index.js', array('jquery'), null, true);
     }
 }
 
