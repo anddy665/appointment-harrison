@@ -1,37 +1,35 @@
 <div class="wrap">
     <h1>Schedules Page</h1>
 
-    <?php if (!isset($_GET['action']) || $_GET['action'] !== 'edit'): ?>
-        <h2>Add New Schedule</h2>
-        <form method="POST">
-            <?php wp_nonce_field('create_schedule_nonce', 'create_schedule_nonce_field'); ?>
-            <input type="hidden" name="action" value="create_schedule">
-            <label for="schedule_date">Date:</label>
-            <input type="date" name="schedule_date" required>
-            <label for="start_time">Start Time:</label>
-            <input type="time" name="start_time" required>
-            <label for="end_time">End Time:</label>
-            <input type="time" name="end_time" required>
-            <button type="submit" class="button button-primary">Add Schedule</button>
-        </form>
-    <?php endif; ?>
+    <h2><?= isset($_GET['action']) && $_GET['action'] == 'edit' && isset($schedule_to_edit) ? 'Edit Schedule' : 'Add New Schedule'; ?></h2>
 
-    <?php if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($schedule_to_edit)): ?>
-        <h2>Edit Schedule</h2>
-        <form method="POST">
+    <form method="POST">
+        <?php if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($schedule_to_edit)): ?>
             <?php wp_nonce_field('edit_schedule_nonce', 'edit_schedule_nonce_field'); ?>
             <input type="hidden" name="action" value="edit_schedule">
             <input type="hidden" name="schedule_id" value="<?= intval($schedule_to_edit->id); ?>">
-            <label for="schedule_date">Date:</label>
-            <input type="date" name="schedule_date" value="<?= esc_attr($schedule_to_edit->schedule_date); ?>" required>
-            <label for="start_time">Start Time:</label>
-            <input type="time" name="start_time" value="<?= esc_attr($schedule_to_edit->start_time); ?>" required>
-            <label for="end_time">End Time:</label>
-            <input type="time" name="end_time" value="<?= esc_attr($schedule_to_edit->end_time); ?>" required>
-            <button type="submit" class="button button-primary">Edit Schedule</button>
+        <?php else: ?>
+            <?php wp_nonce_field('create_schedule_nonce', 'create_schedule_nonce_field'); ?>
+            <input type="hidden" name="action" value="create_schedule">
+        <?php endif; ?>
+
+        <label for="schedule_date">Date:</label>
+        <input type="date" name="schedule_date" value="<?= isset($schedule_to_edit) ? esc_attr($schedule_to_edit->schedule_date) : ''; ?>" required>
+
+        <label for="start_time">Start Time:</label>
+        <input type="time" name="start_time" value="<?= isset($schedule_to_edit) ? esc_attr($schedule_to_edit->start_time) : ''; ?>" required>
+
+        <label for="end_time">End Time:</label>
+        <input type="time" name="end_time" value="<?= isset($schedule_to_edit) ? esc_attr($schedule_to_edit->end_time) : ''; ?>" required>
+
+        <button type="submit" class="button button-primary">
+            <?= isset($_GET['action']) && $_GET['action'] == 'edit' ? 'Edit Schedule' : 'Add Schedule'; ?>
+        </button>
+
+        <?php if (isset($_GET['action']) && $_GET['action'] == 'edit'): ?>
             <a href="<?= admin_url('admin.php?page=schedules'); ?>" class="button button-secondary">Cancel</a>
-        </form>
-    <?php endif; ?>
+        <?php endif; ?>
+    </form>
 
     <h2>Existing Schedules</h2>
     <?php if (!empty($schedules)): ?>
