@@ -7,9 +7,6 @@
  * Author: Harrisong Gutierrez
  */
 
-
-
-
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -17,10 +14,42 @@ if (!defined('ABSPATH')) {
 define('APPOINTMENTS_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('APPOINTMENTS_PLUGIN_URL', plugin_dir_url(__FILE__));
 
-require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/admin-functions.php';
-require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/appointments-functions.php';
-require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/admin-menu.php';
+require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/AdminClass.php';
+require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/AppointmentsClass.php';
+
+class AppointmentsPlugin
+{
+    private $dbHandler;
+
+    public function __construct()
+    {
+        $this->dbHandler = new AppointmentsDatabaseHandler();
+
+        register_activation_hook(__FILE__, [$this, 'create_appointments_tables']);
+        register_deactivation_hook(__FILE__, [$this, 'drop_appointments_tables']);
+
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_scripts']);
 
 
-register_activation_hook(__FILE__, 'create_appointments_tables');
-register_deactivation_hook(__FILE__, 'drop_appointments_tables');
+        new AdminClass($this->dbHandler);
+    }
+
+    public function create_appointments_tables()
+    {
+        $this->dbHandler->create_tables();
+    }
+
+    public function drop_appointments_tables()
+    {
+        $this->dbHandler->drop_tables();
+    }
+
+    public function enqueue_admin_scripts($hook)
+    {
+
+        wp_enqueue_style('appointments-admin-style', APPOINTMENTS_PLUGIN_URL . 'admin/assets/style.css');
+        wp_enqueue_script('appointments-admin-script', APPOINTMENTS_PLUGIN_URL . 'admin/assets/js/index.js', array('jquery'), null, true);
+    }
+}
+
+new AppointmentsPlugin();
