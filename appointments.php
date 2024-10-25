@@ -25,26 +25,26 @@ class AppointmentsPlugin
     {
         $this->dbHandler = new AppointmentsDatabaseHandler();
 
-        register_activation_hook(__FILE__, [$this, 'create_appointments_tables']);
-        register_deactivation_hook(__FILE__, [$this, 'drop_appointments_tables']);
+        register_activation_hook(__FILE__, [$this, 'createAppointmentsTables']);
+        register_deactivation_hook(__FILE__, [$this, 'dropAppointmentsTables']);
 
-        add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_scripts']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
 
 
         new AdminClass($this->dbHandler);
     }
 
-    public function create_appointments_tables()
+    public function createAppointmentsTables()
     {
-        $this->dbHandler->create_tables();
+        $this->dbHandler->createTables();
     }
 
-    public function drop_appointments_tables()
+    public function dropAppointmentsTables()
     {
         $this->dbHandler->dropTables();
     }
 
-    public function enqueue_admin_scripts($hook)
+    public function enqueueAdminScripts($hook)
     {
 
         wp_enqueue_style('appointments-admin-style', APPOINTMENTS_PLUGIN_URL . 'admin/assets/style.css');

@@ -2,13 +2,13 @@
 
 interface AppointmentsDatabaseInterface
 {
-    public function create_tables();
+    public function createTables();
     public function dropTables();
 }
 
 class AppointmentsDatabaseHandler implements AppointmentsDatabaseInterface
 {
-    public function create_tables()
+    public function createTables()
     {
         global $wpdb;
 
