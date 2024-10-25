@@ -42,10 +42,10 @@ class AdminClass
     }
 
 
-    public function loadNoticeTemplate($template_name, $args = array())
+    public function loadTemplate($template_name, $args = array())
     {
         $template_path = plugin_dir_path(__FILE__) . '../../admin/templates/' . $template_name . '.php';
-
+    
         if (file_exists($template_path)) {
             if (!empty($args) && is_array($args)) {
                 extract($args);
@@ -53,6 +53,7 @@ class AdminClass
             include $template_path;
         }
     }
+    
 
     public function showNotice($message, $class = 'notice-success')
     {
@@ -60,7 +61,7 @@ class AdminClass
             'message' => $message,
             'class' => $class,
         );
-        $this->loadNoticeTemplate('notice-template', $args);
+        $this->loadTemplate('notice-template', $args);
     }
 
     public function appointmentsPageContent()
@@ -78,13 +79,13 @@ class AdminClass
     {
         global $wpdb;
         $table_schedules = $wpdb->prefix . 'schedules';
-        $plugin_path = plugin_dir_path(__FILE__);
-
+    
+       
         $schedule_id = isset($_POST['schedule_id']) ? intval($_POST['schedule_id']) : null;
         $schedule_date = isset($_POST['schedule_date']) ? sanitize_text_field($_POST['schedule_date']) : null;
         $start_time = isset($_POST['start_time']) ? sanitize_text_field($_POST['start_time']) : null;
         $end_time = isset($_POST['end_time']) ? sanitize_text_field($_POST['end_time']) : null;
-
+    
         if (isset($_POST['action'])) {
             switch ($_POST['action']) {
                 case 'edit_schedule':
@@ -104,7 +105,7 @@ class AdminClass
                         $this->showNotice('Security check failed.', 'notice-error');
                     }
                     break;
-
+    
                 case 'create_schedule':
                     if (isset($_POST['create_schedule_nonce_field']) && wp_verify_nonce($_POST['create_schedule_nonce_field'], 'create_schedule_nonce')) {
                         $wpdb->insert($table_schedules, [
@@ -121,7 +122,7 @@ class AdminClass
                         $this->showNotice('Security check failed.', 'notice-error');
                     }
                     break;
-
+    
                 case 'delete_schedule':
                     if ($schedule_id && isset($_POST['delete_schedule_nonce_field']) && wp_verify_nonce($_POST['delete_schedule_nonce_field'], 'delete_schedule_nonce')) {
                         $wpdb->delete($table_schedules, ['id' => $schedule_id]);
@@ -136,18 +137,25 @@ class AdminClass
                     break;
             }
         }
-
+    
+        
         if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['schedule_id'])) {
             $schedule_id = intval($_GET['schedule_id']);
             $schedule_to_edit = $wpdb->get_row(
                 $wpdb->prepare("SELECT * FROM $table_schedules WHERE id = %d", $schedule_id)
             );
         }
-
+    
+        
         $schedules = $wpdb->get_results("SELECT * FROM $table_schedules");
-
-        include($plugin_path . '../templates/schedules-template.php');
+    
+        
+        $this->loadTemplate('schedules-template', [
+            'schedules' => $schedules,
+            'schedule_to_edit' => $schedule_to_edit ?? null,
+        ]);
     }
+    
 }
 
 
