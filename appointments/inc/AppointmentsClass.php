@@ -3,7 +3,7 @@
 interface AppointmentsDatabaseInterface
 {
     public function create_tables();
-    public function drop_tables();
+    public function dropTables();
 }
 
 class AppointmentsDatabaseHandler implements AppointmentsDatabaseInterface
@@ -57,7 +57,7 @@ class AppointmentsDatabaseHandler implements AppointmentsDatabaseInterface
         dbDelta($sql_appointments_schedules);
     }
 
-    public function drop_tables()
+    public function dropTables()
     {
         global $wpdb;
 

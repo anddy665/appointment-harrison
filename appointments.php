@@ -41,7 +41,7 @@ class AppointmentsPlugin
 
     public function drop_appointments_tables()
     {
-        $this->dbHandler->drop_tables();
+        $this->dbHandler->dropTables();
     }
 
     public function enqueue_admin_scripts($hook)
