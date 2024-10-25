@@ -7,17 +7,17 @@ class AdminClass
     public function __construct(AppointmentsDatabaseInterface $dbHandler)
     {
         $this->dbHandler = $dbHandler;
-        add_action('admin_menu', [$this, 'create_admin_menu']);
+        add_action('admin_menu', [$this, 'createAdminMenu']);
     }
 
-    public function create_admin_menu()
+    public function createAdminMenu()
     {
         add_menu_page(
             'Appointments',
             'Appointments',
             'manage_options',
             'appointments',
-            [$this, 'appointments_page_content'],
+            [$this, 'appointmentsPageContent'],
             'dashicons-calendar',
             20
         );
@@ -28,7 +28,7 @@ class AdminClass
             'Appointments',
             'manage_options',
             'appointments',
-            [$this, 'appointments_page_content']
+            [$this, 'appointmentsPageContent']
         );
 
         add_submenu_page(
@@ -37,11 +37,12 @@ class AdminClass
             'Schedules',
             'manage_options',
             'schedules',
-            [$this, 'schedules_page_content']
+            [$this, 'schedulesPageContent']
         );
     }
 
-    public function load_notice_template($template_name, $args = array())
+
+    public function loadNoticeTemplate($template_name, $args = array())
     {
         $template_path = plugin_dir_path(__FILE__) . '../../admin/templates/' . $template_name . '.php';
 
@@ -53,16 +54,16 @@ class AdminClass
         }
     }
 
-    public function show_notice($message, $class = 'notice-success')
+    public function showNotice($message, $class = 'notice-success')
     {
         $args = array(
             'message' => $message,
             'class' => $class,
         );
-        $this->load_notice_template('notice-template', $args);
+        $this->loadNoticeTemplate('notice-template', $args);
     }
 
-    public function appointments_page_content()
+    public function appointmentsPageContent()
     {
         $template_path = plugin_dir_path(__FILE__) . '../../admin/templates/appointments-page.php';
 
@@ -73,7 +74,7 @@ class AdminClass
         }
     }
 
-    public function schedules_page_content()
+    public function schedulesPageContent()
     {
         global $wpdb;
         $table_schedules = $wpdb->prefix . 'schedules';
@@ -94,13 +95,13 @@ class AdminClass
                             ['id' => $schedule_id]
                         );
                         if ($wpdb->last_error) {
-                            $this->show_notice('Failed to update schedule: ' . $wpdb->last_error, 'notice-error');
+                            $this->showNotice('Failed to update schedule: ' . $wpdb->last_error, 'notice-error');
                         } else {
-                            $this->show_notice('Schedule updated successfully.', 'notice-success');
+                            $this->showNotice('Schedule updated successfully.', 'notice-success');
                             wp_redirect(admin_url('admin.php?page=schedules'));
                         }
                     } else {
-                        $this->show_notice('Security check failed.', 'notice-error');
+                        $this->showNotice('Security check failed.', 'notice-error');
                     }
                     break;
 
@@ -112,12 +113,12 @@ class AdminClass
                             'end_time' => $end_time
                         ]);
                         if ($wpdb->last_error) {
-                            $this->show_notice('Failed to create schedule: ' . $wpdb->last_error, 'notice-error');
+                            $this->showNotice('Failed to create schedule: ' . $wpdb->last_error, 'notice-error');
                         } else {
-                            $this->show_notice('Schedule created successfully.', 'notice-success');
+                            $this->showNotice('Schedule created successfully.', 'notice-success');
                         }
                     } else {
-                        $this->show_notice('Security check failed.', 'notice-error');
+                        $this->showNotice('Security check failed.', 'notice-error');
                     }
                     break;
 
@@ -125,12 +126,12 @@ class AdminClass
                     if ($schedule_id && isset($_POST['delete_schedule_nonce_field']) && wp_verify_nonce($_POST['delete_schedule_nonce_field'], 'delete_schedule_nonce')) {
                         $wpdb->delete($table_schedules, ['id' => $schedule_id]);
                         if ($wpdb->last_error) {
-                            $this->show_notice('Failed to delete schedule: ' . $wpdb->last_error, 'notice-error');
+                            $this->showNotice('Failed to delete schedule: ' . $wpdb->last_error, 'notice-error');
                         } else {
-                            $this->show_notice('Schedule deleted successfully.', 'notice-success');
+                            $this->showNotice('Schedule deleted successfully.', 'notice-success');
                         }
                     } else {
-                        $this->show_notice('Security check failed.', 'notice-error');
+                        $this->showNotice('Security check failed.', 'notice-error');
                     }
                     break;
             }
@@ -148,3 +149,5 @@ class AdminClass
         include($plugin_path . '../templates/schedules-template.php');
     }
 }
+
+
