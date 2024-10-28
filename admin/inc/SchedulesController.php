@@ -7,39 +7,39 @@ class SchedulesController {
         $this->wpdb = $wpdb;
     }
 
-    public function handle_request() {
-        // Determinar acción
-        $action = isset($_POST['action']) ? sanitize_text_field($_POST['action']) : 'create_schedule';
+    public function handleRequest() {
+  
+        $action = isset($_POST['action']) ? sanitize_text_field($_POST['action']) : 'createSchedule';
         $schedule_to_edit = null;
 
-        // Cargar el horario a editar si corresponde
-        if ($action === 'edit_schedule' && isset($_POST['schedule_id'])) {
+        
+        if ($action === 'editSchedule' && isset($_POST['schedule_id'])) {
             $schedule_id = intval($_POST['schedule_id']);
             $schedule_to_edit = $this->wpdb->get_row(
                 $this->wpdb->prepare("SELECT * FROM {$this->wpdb->prefix}schedules WHERE id = %d", $schedule_id)
             );
         }
 
-        // Manejar acciones de creación, edición y eliminación
+       
         switch ($action) {
-            case 'edit_schedule':
-                $this->edit_schedule();
+            case 'editSchedule':
+                $this->editSchedule();
                 break;
-            case 'delete_schedule':
-                $this->delete_schedule();
+            case 'deleteSchedule':
+                $this->deleteSchedule();
                 break;
-            case 'create_schedule':
+            case 'createSchedule':
             default:
-                $this->create_schedule();
+                $this->createSchedule();
                 break;
         }
 
-        // Cargar el template
-        $this->load_template($action, $schedule_to_edit);
+       
+        $this->loadTemplate($action, $schedule_to_edit);
     }
 
-    private function load_template($action, $schedule_to_edit) {
-        $schedules = $this->get_schedules();
+    private function loadTemplate($action, $schedule_to_edit) {
+        $schedules = $this->getSchedules();
         get_template_part('templates/schedules-template', null, [
             'action' => $action,
             'schedule_to_edit' => $schedule_to_edit,
@@ -47,11 +47,11 @@ class SchedulesController {
         ]);
     }
 
-    private function get_schedules() {
+    private function getSchedules() {
         return $this->wpdb->get_results("SELECT * FROM {$this->wpdb->prefix}schedules");
     }
 
-    private function create_schedule() {
+    private function createSchedule() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['schedule_date'])) {
             $schedule_data = [
                 'schedule_date' => sanitize_text_field($_POST['schedule_date']),
@@ -64,7 +64,7 @@ class SchedulesController {
         }
     }
 
-    private function edit_schedule() {
+    private function editSchedule() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['schedule_id'])) {
             $schedule_id = intval($_POST['schedule_id']);
             $schedule_data = [
@@ -78,7 +78,7 @@ class SchedulesController {
         }
     }
 
-    private function delete_schedule() {
+    private function deleteSchedule() {
         if (isset($_POST['schedule_id'])) {
             $schedule_id = intval($_POST['schedule_id']);
             $this->wpdb->delete("{$this->wpdb->prefix}schedules", ['id' => $schedule_id]);

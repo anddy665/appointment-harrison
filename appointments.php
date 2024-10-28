@@ -68,7 +68,7 @@ class AppointmentsPlugin
     {
         global $wpdb; 
         $schedules_controller = new SchedulesController($wpdb);
-        $schedules_controller->handle_request(); 
+        $schedules_controller->handleRequest(); 
     }
 }
 
