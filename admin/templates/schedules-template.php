@@ -1,16 +1,22 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit; // Evitar el acceso directo
+}
+
+$schedule_to_edit = isset($args['schedule_to_edit']) ? $args['schedule_to_edit'] : null;
+$schedules = isset($args['schedules']) ? $args['schedules'] : [];
+?>
+
 <div class="wrap">
     <h1>Schedules Page</h1>
 
-    <h2><?= isset($_GET['action']) && $_GET['action'] == 'edit' && isset($schedule_to_edit) ? 'Edit Schedule' : 'Add New Schedule'; ?></h2>
+    <h2><?= $schedule_to_edit ? 'Edit Schedule' : 'Add New Schedule'; ?></h2>
 
     <form method="POST">
-        <?php if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($schedule_to_edit)): ?>
-            <?php wp_nonce_field('edit_schedule_nonce', 'edit_schedule_nonce_field'); ?>
-            <input type="hidden" name="action" value="edit_schedule">
+        <?php wp_nonce_field($schedule_to_edit ? 'edit_schedule_nonce' : 'create_schedule_nonce', $schedule_to_edit ? 'edit_schedule_nonce_field' : 'create_schedule_nonce_field'); ?>
+        <input type="hidden" name="action" value="<?= $schedule_to_edit ? 'edit_schedule' : 'create_schedule'; ?>">
+        <?php if ($schedule_to_edit): ?>
             <input type="hidden" name="schedule_id" value="<?= intval($schedule_to_edit->id); ?>">
-        <?php else: ?>
-            <?php wp_nonce_field('create_schedule_nonce', 'create_schedule_nonce_field'); ?>
-            <input type="hidden" name="action" value="create_schedule">
         <?php endif; ?>
 
         <label for="schedule_date">Date:</label>
@@ -23,10 +29,10 @@
         <input type="time" name="end_time" value="<?= isset($schedule_to_edit) ? esc_attr($schedule_to_edit->end_time) : ''; ?>" required>
 
         <button type="submit" class="button button-primary">
-            <?= isset($_GET['action']) && $_GET['action'] == 'edit' ? 'Edit Schedule' : 'Add Schedule'; ?>
+            <?= $schedule_to_edit ? 'Edit Schedule' : 'Add Schedule'; ?>
         </button>
 
-        <?php if (isset($_GET['action']) && $_GET['action'] == 'edit'): ?>
+        <?php if ($schedule_to_edit): ?>
             <a href="<?= admin_url('admin.php?page=schedules'); ?>" class="button button-secondary">Cancel</a>
         <?php endif; ?>
     </form>
