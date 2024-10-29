@@ -2,12 +2,15 @@
 
 require_once 'BaseController.php';
 
-class SchedulesController extends BaseController {
-    public function __construct($wpdb) {
-        parent::__construct($wpdb); 
+class SchedulesController extends BaseController
+{
+    public function __construct($wpdb)
+    {
+        parent::__construct($wpdb);
     }
 
-    public function handleRequest() {
+    public function handleRequest()
+    {
         $action = isset($_POST['action']) ? sanitize_text_field($_POST['action']) : 'createSchedule';
         $schedule_to_edit = null;
 
@@ -34,7 +37,8 @@ class SchedulesController extends BaseController {
         $this->loadTemplate($action, $schedule_to_edit);
     }
 
-    private function createSchedule() {
+    private function createSchedule()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['schedule_date'])) {
             $schedule_data = [
                 'schedule_date' => sanitize_text_field($_POST['schedule_date']),
@@ -47,7 +51,8 @@ class SchedulesController extends BaseController {
         }
     }
 
-    private function editSchedule() {
+    private function editSchedule()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['schedule_id'])) {
             $schedule_id = intval($_POST['schedule_id']);
             $schedule_data = [
@@ -61,7 +66,8 @@ class SchedulesController extends BaseController {
         }
     }
 
-    private function deleteSchedule() {
+    private function deleteSchedule()
+    {
         if (isset($_POST['schedule_id'])) {
             $schedule_id = intval($_POST['schedule_id']);
             $this->wpdb->delete("{$this->wpdb->prefix}schedules", ['id' => $schedule_id]);

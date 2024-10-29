@@ -4,7 +4,7 @@ class AdminClass
 {
     private $dbHandler;
 
-    
+
     private const MENU_SLUG = 'appointments';
     private const MENU_TITLE = 'Appointments';
     private const SCHEDULES_SLUG = 'schedules';
@@ -16,16 +16,17 @@ class AdminClass
         add_action('admin_menu', [$this, 'createAdminMenu']);
     }
 
+
     public function createAdminMenu()
     {
         add_menu_page(
-            self::MENU_TITLE,                 
-            self::MENU_TITLE,                  
-            'manage_options',                   
-            self::MENU_SLUG,                    
-            [$this, 'appointmentsPageContent'], 
-            'dashicons-calendar',               
-            20                                  
+            self::MENU_TITLE,
+            self::MENU_TITLE,
+            'manage_options',
+            self::MENU_SLUG,
+            [$this, 'appointmentsPageContent'],
+            'dashicons-calendar',
+            20
         );
 
         add_submenu_page(
@@ -47,6 +48,7 @@ class AdminClass
         );
     }
 
+
     public function loadTemplate($template_name, $args = array())
     {
         $template_path = plugin_dir_path(__FILE__) . '../../admin/templates/' . $template_name . '.php';
@@ -59,6 +61,7 @@ class AdminClass
         }
     }
 
+
     public function showNotice($message, $class = 'notice-success')
     {
         $args = array(
@@ -67,6 +70,7 @@ class AdminClass
         );
         $this->loadTemplate('notice-template', $args);
     }
+
 
     public function appointmentsPageContent()
     {
@@ -78,6 +82,7 @@ class AdminClass
             echo '<div class="notice notice-error"><p>' . esc_html__('Template not found:', 'appointment-harrison') . '</p></div>';
         }
     }
+
 
     public function schedulesPageContent()
     {
@@ -103,6 +108,7 @@ class AdminClass
                         } else {
                             $this->showNotice('Schedule updated successfully.', 'notice-success');
                             wp_redirect(admin_url('admin.php?page=' . self::SCHEDULES_SLUG));
+                            exit;
                         }
                     } else {
                         $this->showNotice('Security check failed.', 'notice-error');
