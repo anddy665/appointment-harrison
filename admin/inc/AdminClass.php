@@ -4,7 +4,6 @@ class AdminClass
 {
     private $dbHandler;
 
-
     private const MENU_SLUG = 'appointments';
     private const MENU_TITLE = 'Appointments';
     private const SCHEDULES_SLUG = 'schedules';
@@ -78,8 +77,6 @@ class AdminClass
 
         if (file_exists($template_path)) {
             include $template_path;
-        } else {
-            echo '<div class="notice notice-error"><p>' . esc_html__('Template not found:', 'appointment-harrison') . '</p></div>';
         }
     }
 
@@ -108,7 +105,6 @@ class AdminClass
                         } else {
                             $this->showNotice('Schedule updated successfully.', 'notice-success');
                             wp_redirect(admin_url('admin.php?page=' . self::SCHEDULES_SLUG));
-                            
                         }
                     } else {
                         $this->showNotice('Security check failed.', 'notice-error');
