@@ -25,12 +25,16 @@ class AppointmentsPlugin
     public function __construct()
     {
         $this->dbHandler = new AppointmentsDatabaseHandler();
+        $this->register_hooks(); 
+    }
 
+    private function register_hooks() 
+    {
         register_activation_hook(__FILE__, [$this, 'createAppointmentsTables']);
         register_deactivation_hook(__FILE__, [$this, 'dropAppointmentsTables']);
 
         add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
-        add_action('admin_menu', [$this, 'addAdminMenu']); 
+        add_action('admin_menu', [$this, 'addAdminMenu']);
 
         new AdminClass($this->dbHandler);
     }
