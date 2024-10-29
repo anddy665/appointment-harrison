@@ -16,7 +16,7 @@ define('APPOINTMENTS_PLUGIN_URL', plugin_dir_url(__FILE__));
 
 require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/AdminClass.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/AppointmentsClass.php';
-require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/SchedulesController.php'; 
+require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/SchedulesController.php';
 
 class AppointmentsPlugin
 {
@@ -25,10 +25,10 @@ class AppointmentsPlugin
     public function __construct()
     {
         $this->dbHandler = new AppointmentsDatabaseHandler();
-        $this->register_hooks(); 
+        $this->register_hooks();
     }
 
-    private function register_hooks() 
+    private function register_hooks()
     {
         register_activation_hook(__FILE__, [$this, 'createAppointmentsTables']);
         register_deactivation_hook(__FILE__, [$this, 'dropAppointmentsTables']);
@@ -58,21 +58,21 @@ class AppointmentsPlugin
     public function addAdminMenu()
     {
         add_menu_page(
-            'Appointments', 
-            'Appointments', 
+            'Appointments',
+            'Appointments',
             'manage_options',
-            'appointments', 
-            [$this, 'renderAppointmentsPage'], 
+            'appointments',
+            [$this, 'renderAppointmentsPage'],
             'dashicons-calendar-alt',
-            6 
+            6
         );
     }
 
     public function renderAppointmentsPage()
     {
-        global $wpdb; 
+        global $wpdb;
         $schedules_controller = new SchedulesController($wpdb);
-        $schedules_controller->handleRequest(); 
+        $schedules_controller->handleRequest();
     }
 }
 
