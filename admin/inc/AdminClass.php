@@ -108,7 +108,7 @@ class AdminClass
                         } else {
                             $this->showNotice('Schedule updated successfully.', 'notice-success');
                             wp_redirect(admin_url('admin.php?page=' . self::SCHEDULES_SLUG));
-                            exit;
+                            
                         }
                     } else {
                         $this->showNotice('Security check failed.', 'notice-error');
