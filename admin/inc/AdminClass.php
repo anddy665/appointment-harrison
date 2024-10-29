@@ -1,6 +1,11 @@
+
+
+
 <?php
 
-class AdminClass
+require_once 'BaseAdminClass.php';
+
+class AdminClass extends BaseAdminClass
 {
     private $dbHandler;
 
@@ -14,7 +19,6 @@ class AdminClass
         $this->dbHandler = $dbHandler;
         add_action('admin_menu', [$this, 'createAdminMenu']);
     }
-
 
     public function createAdminMenu()
     {
@@ -47,20 +51,6 @@ class AdminClass
         );
     }
 
-
-    public function loadTemplate($template_name, $args = array())
-    {
-        $template_path = plugin_dir_path(__FILE__) . '../../admin/templates/' . $template_name . '.php';
-
-        if (file_exists($template_path)) {
-            if (!empty($args) && is_array($args)) {
-                extract($args);
-            }
-            include $template_path;
-        }
-    }
-
-
     public function showNotice($message, $class = 'notice-success')
     {
         $args = array(
@@ -70,16 +60,10 @@ class AdminClass
         $this->loadTemplate('notice-template', $args);
     }
 
-
     public function appointmentsPageContent()
     {
-        $template_path = plugin_dir_path(__FILE__) . '../../admin/templates/appointments-page.php';
-
-        if (file_exists($template_path)) {
-            include $template_path;
-        }
+        $this->loadTemplate('appointments-page');
     }
-
 
     public function schedulesPageContent()
     {
@@ -149,6 +133,7 @@ class AdminClass
                 $wpdb->prepare("SELECT * FROM $table_schedules WHERE id = %d", $schedule_id)
             );
         }
+
 
         $schedules = $wpdb->get_results("SELECT * FROM $table_schedules");
 
