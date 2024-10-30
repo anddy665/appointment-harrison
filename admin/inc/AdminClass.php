@@ -22,6 +22,11 @@ class AdminClass extends BaseAdminClass
 
     public function createAdminMenu()
     {
+        // Elimina menús y submenús duplicados si existen
+        remove_menu_page(self::MENU_SLUG);
+        remove_submenu_page(self::MENU_SLUG, self::SCHEDULES_SLUG);
+    
+        // Añade el menú principal "Appointments"
         add_menu_page(
             self::MENU_TITLE,
             self::MENU_TITLE,
@@ -31,25 +36,18 @@ class AdminClass extends BaseAdminClass
             'dashicons-calendar',
             20
         );
-
-        add_submenu_page(
-            self::MENU_SLUG,
-            self::MENU_TITLE,
-            self::MENU_TITLE,
-            'manage_options',
-            self::MENU_SLUG,
-            [$this, 'appointmentsPageContent']
-        );
-
+    
+        // Añade solo el submenú "Schedules"
         add_submenu_page(
             self::MENU_SLUG,
             self::SCHEDULES_TITLE,
             self::SCHEDULES_TITLE,
             'manage_options',
-            self::SCHEDULES_SLUG,
+            'manage_schedules',  // slug único
             [$this, 'schedulesPageContent']
         );
     }
+    
 
     public function showNotice($message, $class = 'notice-success')
     {
