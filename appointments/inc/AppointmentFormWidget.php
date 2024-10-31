@@ -23,7 +23,6 @@ class Appointment_Form_Widget extends WP_Widget
         echo '<input type="text" name="full_name" placeholder="Full Name" required>';
         echo '<input type="email" name="email" placeholder="Email" required>';
         echo '<input type="text" name="phone" placeholder="Phone" required>';
-        echo '<input type="datetime-local" name="appointment_date" placeholder="Date" required>';
         echo '<textarea name="description" placeholder="Description"></textarea>';
 
         
@@ -48,16 +47,15 @@ class Appointment_Form_Widget extends WP_Widget
         $full_name = sanitize_text_field($_POST['full_name']);
         $email = sanitize_email($_POST['email']);
         $phone = sanitize_text_field($_POST['phone']);
-        $appointment_date = sanitize_text_field($_POST['appointment_date']);
         $description = sanitize_textarea_field($_POST['description']);
         $schedule_id = intval($_POST['schedule_id']);
 
-        $db_handler = new AppointmentsDatabaseHandler();
-        
-        
-        $appointment_id = $db_handler->insertAppointment($full_name, $email, $phone, $appointment_date, $description);
+        $schedule = $wpdb->get_row("SELECT schedule_date, start_time FROM {$wpdb->prefix}schedules WHERE id = $schedule_id");
 
         
+        $appointment_id = $this->insertAppointment($full_name, $email, $phone, "{$schedule->schedule_date} {$schedule->start_time}", $description);
+
+       
         $wpdb->insert(
             "{$wpdb->prefix}appointments_schedules",
             [
@@ -66,5 +64,25 @@ class Appointment_Form_Widget extends WP_Widget
             ],
             ['%d', '%d']
         );
+    }
+
+    private function insertAppointment($full_name, $email, $phone, $appointment_date, $description)
+    {
+        global $wpdb;
+
+        $table = $wpdb->prefix . 'appointments';
+        $wpdb->insert(
+            $table,
+            [
+                'full_name' => $full_name,
+                'email' => $email,
+                'phone' => $phone,
+                'appointment_date' => $appointment_date,
+                'description' => $description,
+            ],
+            ['%s', '%s', '%s', '%s', '%s']
+        );
+
+        return $wpdb->insert_id; 
     }
 }
