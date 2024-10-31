@@ -6,6 +6,7 @@ interface AppointmentsDatabaseInterface
     public function dropTables();
 }
 
+
 class AppointmentsDatabaseHandler implements AppointmentsDatabaseInterface
 {
     public function createTables()
@@ -85,5 +86,7 @@ class AppointmentsDatabaseHandler implements AppointmentsDatabaseInterface
             ],
             ['%s', '%s', '%s', '%s', '%s']
         );
+
+        return $wpdb->insert_id; 
     }
 }

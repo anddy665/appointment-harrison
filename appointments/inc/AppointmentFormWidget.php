@@ -25,6 +25,17 @@ class Appointment_Form_Widget extends WP_Widget
         echo '<input type="text" name="phone" placeholder="Phone" required>';
         echo '<input type="datetime-local" name="appointment_date" placeholder="Date" required>';
         echo '<textarea name="description" placeholder="Description"></textarea>';
+
+        
+        global $wpdb;
+        $schedules = $wpdb->get_results("SELECT id, schedule_date, start_time, end_time FROM {$wpdb->prefix}schedules");
+        echo '<select name="schedule_id" required>';
+        echo '<option value="">Select Schedule</option>';
+        foreach ($schedules as $schedule) {
+            echo "<option value='{$schedule->id}'>Date: {$schedule->schedule_date} | Time: {$schedule->start_time} - {$schedule->end_time}</option>";
+        }
+        echo '</select>';
+
         echo '<button type="submit">Book Appointment</button>';
         echo '</form>';
         echo $args['after_widget'];
@@ -39,8 +50,21 @@ class Appointment_Form_Widget extends WP_Widget
         $phone = sanitize_text_field($_POST['phone']);
         $appointment_date = sanitize_text_field($_POST['appointment_date']);
         $description = sanitize_textarea_field($_POST['description']);
+        $schedule_id = intval($_POST['schedule_id']);
 
         $db_handler = new AppointmentsDatabaseHandler();
-        $db_handler->insertAppointment($full_name, $email, $phone, $appointment_date, $description);
+        
+        
+        $appointment_id = $db_handler->insertAppointment($full_name, $email, $phone, $appointment_date, $description);
+
+        
+        $wpdb->insert(
+            "{$wpdb->prefix}appointments_schedules",
+            [
+                'appointment_id' => $appointment_id,
+                'schedule_id' => $schedule_id
+            ],
+            ['%d', '%d']
+        );
     }
 }
