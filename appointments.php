@@ -34,10 +34,11 @@ class AppointmentsPlugin
         register_deactivation_hook(__FILE__, [$this, 'dropAppointmentsTables']);
 
         add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
-        add_action('admin_menu', [$this, 'addAdminMenu']);
+        
 
         new AdminClass($this->dbHandler);
     }
+
 
     public function createAppointmentsTables()
     {
