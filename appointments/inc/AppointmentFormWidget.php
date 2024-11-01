@@ -14,7 +14,7 @@ class AppointmentFormWidget extends WP_Widget
     public function widget($args, $instance)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['appointment_form_nonce']) && wp_verify_nonce($_POST['appointment_form_nonce'], 'submit_appointment_form')) {
-            $this->handle_form_submission();
+            $this->handleFormSubmission();
         }
 
         echo $args['before_widget'];
@@ -26,7 +26,7 @@ class AppointmentFormWidget extends WP_Widget
     }
 
 
-    private function handle_form_submission()
+    private function handleFormSubmission()
     {
         global $wpdb;
 
