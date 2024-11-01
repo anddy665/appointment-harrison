@@ -17,31 +17,14 @@ class AppointmentFormWidget extends WP_Widget
             $this->handle_form_submission();
         }
 
-?>
-        <?= $args['before_widget']; ?>
-        <form id="appointment-form" method="POST">
-            <?php wp_nonce_field('submit_appointment_form', 'appointment_form_nonce'); ?>
-            <input type="text" name="full_name" placeholder="Full Name" required>
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="text" name="phone" placeholder="Phone" required>
-            <textarea name="description" placeholder="Description"></textarea>
+        echo $args['before_widget'];
 
-            <?php
-            global $wpdb;
-            $schedules = $wpdb->get_results("SELECT id, schedule_date, start_time, end_time FROM {$wpdb->prefix}schedules");
-            ?>
-            <select name="schedule_id" required>
-                <option value="">Select Schedule</option>
-                <?php foreach ($schedules as $schedule) : ?>
-                    <option value="<?= $schedule->id; ?>">Date: <?= $schedule->schedule_date; ?> | Time: <?= $schedule->start_time; ?> - <?= $schedule->end_time; ?></option>
-                <?php endforeach; ?>
-            </select>
 
-            <button type="submit">Book Appointment</button>
-        </form>
-        <?= $args['after_widget']; ?>
-<?php
+        include plugin_dir_path(__FILE__) . '../templates/appointment-form-template.php';
+
+        echo $args['after_widget'];
     }
+
 
     private function handle_form_submission()
     {
