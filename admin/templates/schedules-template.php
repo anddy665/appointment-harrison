@@ -1,6 +1,6 @@
 <?php
 if (!defined('ABSPATH')) {
-    exit; 
+    exit;
 }
 
 $schedule_to_edit = isset($args['schedule_to_edit']) ? $args['schedule_to_edit'] : null;

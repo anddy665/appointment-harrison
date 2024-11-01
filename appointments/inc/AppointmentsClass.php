@@ -87,6 +87,6 @@ class AppointmentsDatabaseHandler implements AppointmentsDatabaseInterface
             ['%s', '%s', '%s', '%s', '%s']
         );
 
-        return $wpdb->insert_id; 
+        return $wpdb->insert_id;
     }
 }

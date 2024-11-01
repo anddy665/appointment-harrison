@@ -1,11 +1,11 @@
 <?php
 
-class Appointment_Form_Widget extends WP_Widget
+class AppointmentFormWidget extends WP_Widget
 {
     public function __construct()
     {
         parent::__construct(
-            'appointment_form_widget',
+            'AppointmentFormWidget',
             __('Appointment Form Widget', 'text_domain'),
             array('description' => __('A widget to capture appointment information', 'text_domain'))
         );
@@ -17,27 +17,30 @@ class Appointment_Form_Widget extends WP_Widget
             $this->handle_form_submission();
         }
 
-        echo $args['before_widget'];
-        echo '<form id="appointment-form" method="POST">';
-        echo wp_nonce_field('submit_appointment_form', 'appointment_form_nonce');
-        echo '<input type="text" name="full_name" placeholder="Full Name" required>';
-        echo '<input type="email" name="email" placeholder="Email" required>';
-        echo '<input type="text" name="phone" placeholder="Phone" required>';
-        echo '<textarea name="description" placeholder="Description"></textarea>';
+?>
+        <?= $args['before_widget']; ?>
+        <form id="appointment-form" method="POST">
+            <?php wp_nonce_field('submit_appointment_form', 'appointment_form_nonce'); ?>
+            <input type="text" name="full_name" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="text" name="phone" placeholder="Phone" required>
+            <textarea name="description" placeholder="Description"></textarea>
 
-        
-        global $wpdb;
-        $schedules = $wpdb->get_results("SELECT id, schedule_date, start_time, end_time FROM {$wpdb->prefix}schedules");
-        echo '<select name="schedule_id" required>';
-        echo '<option value="">Select Schedule</option>';
-        foreach ($schedules as $schedule) {
-            echo "<option value='{$schedule->id}'>Date: {$schedule->schedule_date} | Time: {$schedule->start_time} - {$schedule->end_time}</option>";
-        }
-        echo '</select>';
+            <?php
+            global $wpdb;
+            $schedules = $wpdb->get_results("SELECT id, schedule_date, start_time, end_time FROM {$wpdb->prefix}schedules");
+            ?>
+            <select name="schedule_id" required>
+                <option value="">Select Schedule</option>
+                <?php foreach ($schedules as $schedule) : ?>
+                    <option value="<?= $schedule->id; ?>">Date: <?= $schedule->schedule_date; ?> | Time: <?= $schedule->start_time; ?> - <?= $schedule->end_time; ?></option>
+                <?php endforeach; ?>
+            </select>
 
-        echo '<button type="submit">Book Appointment</button>';
-        echo '</form>';
-        echo $args['after_widget'];
+            <button type="submit">Book Appointment</button>
+        </form>
+        <?= $args['after_widget']; ?>
+<?php
     }
 
     private function handle_form_submission()
@@ -52,10 +55,8 @@ class Appointment_Form_Widget extends WP_Widget
 
         $schedule = $wpdb->get_row("SELECT schedule_date, start_time FROM {$wpdb->prefix}schedules WHERE id = $schedule_id");
 
-        
         $appointment_id = $this->insertAppointment($full_name, $email, $phone, "{$schedule->schedule_date} {$schedule->start_time}", $description);
 
-       
         $wpdb->insert(
             "{$wpdb->prefix}appointments_schedules",
             [
@@ -83,6 +84,6 @@ class Appointment_Form_Widget extends WP_Widget
             ['%s', '%s', '%s', '%s', '%s']
         );
 
-        return $wpdb->insert_id; 
+        return $wpdb->insert_id;
     }
 }
