@@ -20,16 +20,18 @@ class AppointmentsDatabaseHandler implements AppointmentsDatabaseInterface
         $charset_collate = $wpdb->get_charset_collate();
 
         $sql_appointments = "
-        CREATE TABLE $table_appointments (
-            id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-            full_name varchar(255) NOT NULL,
-            email varchar(100) NOT NULL,
-            phone varchar(20) NOT NULL,
-            appointment_date datetime NOT NULL,
-            description text NOT NULL,
-            PRIMARY KEY (id)
-        ) $charset_collate;
-        ";
+CREATE TABLE $table_appointments (
+    id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+    full_name varchar(255) NOT NULL,
+    email varchar(100) NOT NULL,
+    phone varchar(20) NOT NULL,
+    appointment_date datetime NOT NULL,
+    start_time time NOT NULL,       -- Nueva columna
+    end_time time NOT NULL,         -- Nueva columna
+    description text NOT NULL,
+    PRIMARY KEY (id)
+) $charset_collate;
+";
 
         $sql_schedules = "
         CREATE TABLE $table_schedules (

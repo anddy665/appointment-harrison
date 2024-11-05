@@ -17,19 +17,42 @@ $schedules = $wpdb->get_results("SELECT id, schedule_date, start_time, end_time 
         <input type="text" name="phone" placeholder="Phone" required>
         <textarea name="description" placeholder="Description"></textarea>
 
-        <select name="schedule_id" required>
-            <option value="">Select Schedule</option>
-            <?php if (!empty($schedules)) : ?>
-                <?php foreach ($schedules as $schedule) : ?>
-                    <option value="<?= esc_attr($schedule->id); ?>">
-                        Date: <?= esc_html($schedule->schedule_date); ?> | Time: <?= esc_html($schedule->start_time); ?> - <?= esc_html($schedule->end_time); ?>
-                    </option>
-                <?php endforeach; ?>
-            <?php else : ?>
-                <option value="">No schedules available</option>
-            <?php endif; ?>
-        </select>
+        <!-- Selección de Fecha -->
+        <label for="appointment_date">Select Date:</label>
+        <input type="date" id="appointment_date" name="appointment_date" required>
+
+        <!-- Selección de Hora de Inicio -->
+        <label for="start_time">Start Time:</label>
+        <input type="time" id="start_time" name="start_time" required>
+
+        <!-- Selección de Hora de Fin -->
+        <label for="end_time">End Time:</label>
+        <input type="time" id="end_time" name="end_time" required>
 
         <button type="submit">Book Appointment</button>
     </form>
 </div>
+
+<script>
+
+document.getElementById('appointment_date').addEventListener('change', function() {
+    // Obtener el día seleccionado y calcular el día de la semana
+    const selectedDate = new Date(this.value);
+    const selectedDay = selectedDate.getDay(); // 0: Sunday, 1: Monday, ..., 6: Saturday
+    
+    // Traer los días de la semana disponibles desde PHP y convertirlos a números
+    const availableDays = <?php echo json_encode(array_map('intval', array_column($schedules, 'schedule_date'))); ?>;
+
+    // Verificar si al menos uno de los días disponibles coincide con el día seleccionado
+    const isAvailable = availableDays.some(day => day === selectedDay);
+
+    console.log(availableDays,"disponibles");
+    console.log(selectedDay,"seleccionado");
+
+    if (!isAvailable) {
+        alert("Selected date is not available for appointments. Please choose another date.");
+        this.value = ''; // Resetea el campo de fecha
+    }
+});
+
+</script>
