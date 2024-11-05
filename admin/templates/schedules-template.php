@@ -19,8 +19,17 @@ $schedules = isset($args['schedules']) ? $args['schedules'] : [];
             <input type="hidden" name="schedule_id" value="<?= intval($schedule_to_edit->id); ?>">
         <?php endif; ?>
 
-        <label for="schedule_date">Date:</label>
-        <input type="date" name="schedule_date" value="<?= isset($schedule_to_edit) ? esc_attr($schedule_to_edit->schedule_date) : ''; ?>" required>
+        <label for="schedule_date">Day of the Week:</label>
+        <select name="schedule_date" required>
+            <option value="0" <?= isset($schedule_to_edit) && $schedule_to_edit->schedule_date == 0 ? 'selected' : ''; ?>>Sunday</option>
+            <option value="1" <?= isset($schedule_to_edit) && $schedule_to_edit->schedule_date == 1 ? 'selected' : ''; ?>>Monday</option>
+            <option value="2" <?= isset($schedule_to_edit) && $schedule_to_edit->schedule_date == 2 ? 'selected' : ''; ?>>Tuesday</option>
+            <option value="3" <?= isset($schedule_to_edit) && $schedule_to_edit->schedule_date == 3 ? 'selected' : ''; ?>>Wednesday</option>
+            <option value="4" <?= isset($schedule_to_edit) && $schedule_to_edit->schedule_date == 4 ? 'selected' : ''; ?>>Thursday</option>
+            <option value="5" <?= isset($schedule_to_edit) && $schedule_to_edit->schedule_date == 5 ? 'selected' : ''; ?>>Friday</option>
+            <option value="6" <?= isset($schedule_to_edit) && $schedule_to_edit->schedule_date == 6 ? 'selected' : ''; ?>>Saturday</option>
+        </select>
+
 
         <label for="start_time">Start Time:</label>
         <input type="time" name="start_time" value="<?= isset($schedule_to_edit) ? esc_attr($schedule_to_edit->start_time) : ''; ?>" required>
@@ -53,7 +62,7 @@ $schedules = isset($args['schedules']) ? $args['schedules'] : [];
                 <?php foreach ($schedules as $schedule): ?>
                     <tr>
                         <td><?= intval($schedule->id); ?></td>
-                        <td><?= esc_html($schedule->schedule_date); ?></td>
+                        <td><?= esc_html(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][$schedule->schedule_date]); ?></td>
                         <td><?= esc_html(date('h:i A', strtotime($schedule->start_time))); ?></td>
                         <td><?= esc_html(date('h:i A', strtotime($schedule->end_time))); ?></td>
                         <td>
