@@ -41,7 +41,7 @@ class SchedulesController extends BaseController
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['schedule_date'])) {
             $schedule_data = [
-                'schedule_date' => intval($_POST['schedule_date']), 
+                'schedule_date' => intval($_POST['schedule_date']),
                 'start_time' => sanitize_text_field($_POST['start_time']),
                 'end_time' => sanitize_text_field($_POST['end_time']),
             ];
@@ -56,7 +56,7 @@ class SchedulesController extends BaseController
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['schedule_id'])) {
             $schedule_id = intval($_POST['schedule_id']);
             $schedule_data = [
-                'schedule_date' => intval($_POST['schedule_date']), 
+                'schedule_date' => intval($_POST['schedule_date']),
                 'start_time' => sanitize_text_field($_POST['start_time']),
                 'end_time' => sanitize_text_field($_POST['end_time']),
             ];
@@ -65,7 +65,7 @@ class SchedulesController extends BaseController
             exit;
         }
     }
-    
+
 
     private function deleteSchedule()
     {

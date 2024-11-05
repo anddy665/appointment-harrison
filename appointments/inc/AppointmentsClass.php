@@ -32,14 +32,14 @@ class AppointmentsDatabaseHandler implements AppointmentsDatabaseInterface
         ";
 
         $sql_schedules = "
-CREATE TABLE $table_schedules (
-    id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-    schedule_date TINYINT(1) NOT NULL, -- Aquí cambiamos a TINYINT para almacenar el número del día
-    start_time time NOT NULL,
-    end_time time NOT NULL,
-    PRIMARY KEY (id)
-) $charset_collate;
-";
+        CREATE TABLE $table_schedules (
+        id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        schedule_date TINYINT(1) NOT NULL, -- Aquí cambiamos a TINYINT para almacenar el número del día
+        start_time time NOT NULL,
+        end_time time NOT NULL,
+        PRIMARY KEY (id)
+        ) $charset_collate;
+        ";
 
         $sql_appointments_schedules = "
         CREATE TABLE $table_appointments_schedules (
