@@ -17,15 +17,15 @@ $schedules = $wpdb->get_results("SELECT id, schedule_date, start_time, end_time 
         <input type="text" name="phone" placeholder="Phone" required>
         <textarea name="description" placeholder="Description"></textarea>
 
-        <!-- Selección de Fecha -->
+
         <label for="appointment_date">Select Date:</label>
         <input type="date" id="appointment_date" name="appointment_date" required>
 
-        <!-- Selección de Hora de Inicio -->
+
         <label for="start_time">Start Time:</label>
         <input type="time" id="start_time" name="start_time" required>
 
-        <!-- Selección de Hora de Fin -->
+
         <label for="end_time">End Time:</label>
         <input type="time" id="end_time" name="end_time" required>
 
@@ -34,25 +34,25 @@ $schedules = $wpdb->get_results("SELECT id, schedule_date, start_time, end_time 
 </div>
 
 <script>
+    document.getElementById('appointment_date').addEventListener('change', function() {
 
-document.getElementById('appointment_date').addEventListener('change', function() {
-    // Obtener el día seleccionado y calcular el día de la semana
-    const selectedDate = new Date(this.value);
-    const selectedDay = selectedDate.getDay(); // 0: Sunday, 1: Monday, ..., 6: Saturday
-    
-    // Traer los días de la semana disponibles desde PHP y convertirlos a números
-    const availableDays = <?php echo json_encode(array_map('intval', array_column($schedules, 'schedule_date'))); ?>;
+        const selectedDate = new Date(this.value);
+        const selectedDay = selectedDate.getUTCDay();
 
-    // Verificar si al menos uno de los días disponibles coincide con el día seleccionado
-    const isAvailable = availableDays.some(day => day === selectedDay);
 
-    console.log(availableDays,"disponibles");
-    console.log(selectedDay,"seleccionado");
+        const availableDays = <?php echo json_encode(array_map('intval', array_column($schedules, 'schedule_date'))); ?>;
 
-    if (!isAvailable) {
-        alert("Selected date is not available for appointments. Please choose another date.");
-        this.value = ''; // Resetea el campo de fecha
-    }
-});
+        console.log("Días disponibles:", availableDays);
+        console.log("Día seleccionado (UTC):", selectedDay);
 
+        const isMatch = availableDays.includes(selectedDay);
+
+        if (isMatch) {
+            console.log("Día coincidente encontrado:", selectedDay);
+
+        } else {
+            alert("Selected date is not available for appointments. Please choose another date.");
+            this.value = '';
+        }
+    });
 </script>

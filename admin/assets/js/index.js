@@ -3,3 +3,7 @@ jQuery(document).ready(function($) {
         $('.notice').fadeOut('slow');
     }, 1500); 
 });
+
+
+
+
