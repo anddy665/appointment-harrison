@@ -71,11 +71,10 @@ class AppointmentsDatabaseHandler implements AppointmentsDatabaseInterface
         $sql = "DROP TABLE IF EXISTS $table_appointments_schedules, $table_appointments, $table_schedules;";
         $wpdb->query($sql);
     }
-
-    public function insertAppointment($full_name, $email, $phone, $appointment_date, $description)
+    public function insertAppointment($full_name, $email, $phone, $appointment_date, $start_time, $end_time, $description)
     {
         global $wpdb;
-
+    
         $table = $wpdb->prefix . 'appointments';
         $wpdb->insert(
             $table,
@@ -84,11 +83,14 @@ class AppointmentsDatabaseHandler implements AppointmentsDatabaseInterface
                 'email' => $email,
                 'phone' => $phone,
                 'appointment_date' => $appointment_date,
+                'start_time' => $start_time,
+                'end_time' => $end_time,
                 'description' => $description,
             ],
-            ['%s', '%s', '%s', '%s', '%s']
+            ['%s', '%s', '%s', '%s', '%s', '%s', '%s']
         );
-
+    
         return $wpdb->insert_id;
     }
+    
 }
