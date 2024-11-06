@@ -74,7 +74,7 @@ class AppointmentsDatabaseHandler implements AppointmentsDatabaseInterface
     public function insertAppointment($full_name, $email, $phone, $appointment_date, $start_time, $end_time, $description)
     {
         global $wpdb;
-    
+
         $table = $wpdb->prefix . 'appointments';
         $wpdb->insert(
             $table,
@@ -89,8 +89,7 @@ class AppointmentsDatabaseHandler implements AppointmentsDatabaseInterface
             ],
             ['%s', '%s', '%s', '%s', '%s', '%s', '%s']
         );
-    
+
         return $wpdb->insert_id;
     }
-    
 }

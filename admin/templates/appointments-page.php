@@ -4,7 +4,7 @@
     <?php
     global $wpdb;
 
-    // Process appointment update
+
     if (isset($_POST['update_appointment'])) {
         $edit_id = intval($_POST['edit_id']);
         $full_name = sanitize_text_field($_POST['full_name']);
@@ -34,7 +34,7 @@
         wp_redirect(admin_url('admin.php?page=appointments'));
     }
 
-    // Process appointment deletion
+
     if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
         $delete_id = intval($_GET['id']);
         $wpdb->delete("{$wpdb->prefix}appointments", ['id' => $delete_id], ['%d']);
@@ -42,10 +42,10 @@
         wp_redirect(admin_url('admin.php?page=appointments'));
     }
 
-    // Get all appointments
+
     $appointments = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}appointments");
 
-    // Get the appointment to edit, if applicable
+
     if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['id'])) {
         $edit_id = intval($_GET['id']);
         $appointment_to_edit = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}appointments WHERE id = %d", $edit_id));
