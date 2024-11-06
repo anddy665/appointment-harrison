@@ -38,45 +38,64 @@ foreach ($schedules as $schedule) {
     </form>
 </div>
 
+<style>
+    .input-error {
+        border: 2px solid red!important;
+    }
+</style>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const scheduleHours = <?php echo json_encode($schedule_hours); ?>;
         
-        document.getElementById('appointment_date').addEventListener('change', function() {
+        const appointmentDateInput = document.getElementById('appointment_date');
+        const startTimeInput = document.getElementById('start_time');
+        const endTimeInput = document.getElementById('end_time');
+
+        function clearError(inputElement) {
+            inputElement.classList.remove('input-error');
+        }
+
+        appointmentDateInput.addEventListener('change', function() {
+            clearError(this);
+
             const selectedDate = new Date(this.value);
             const selectedDay = selectedDate.getUTCDay();
 
             const availableDay = scheduleHours[selectedDay];
 
             if (availableDay) {
-                console.log("Día disponible:", selectedDay);
-
-                const startTimeInput = document.getElementById('start_time');
-                const endTimeInput = document.getElementById('end_time');
-
                
+                clearError(startTimeInput);
+                clearError(endTimeInput);
+
                 startTimeInput.addEventListener('change', function () {
+                    clearError(this); 
                     const userStartTime = this.value;
                     const userEndTime = endTimeInput.value;
 
                     if (userStartTime < availableDay.start_time || (userEndTime && userEndTime > availableDay.end_time)) {
+                        this.classList.add('input-error'); 
                         alert("Selected time is outside of the available range for this date. Please select a time between " + availableDay.start_time + " and " + availableDay.end_time);
                         this.value = '';
                     }
                 });
 
                 endTimeInput.addEventListener('change', function () {
+                    clearError(this); 
                     const userEndTime = this.value;
                     const userStartTime = startTimeInput.value;
 
                     if ((userStartTime && userStartTime < availableDay.start_time) || userEndTime > availableDay.end_time) {
+                        this.classList.add('input-error'); 
                         alert("Selected time is outside of the available range for this date. Please select a time between " + availableDay.start_time + " and " + availableDay.end_time);
-                        this.value = '';
+                        this.value = ''; 
                     }
                 });
             } else {
+                this.classList.add('input-error');
                 alert("Selected date is not available for appointments. Please choose another date.");
-                this.value = '';
+                this.value = ''; 
             }
         });
     });
