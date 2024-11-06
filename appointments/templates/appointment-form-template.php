@@ -36,17 +36,18 @@ foreach ($schedules as $schedule) {
 
         <button type="submit">Book Appointment</button>
     </form>
-    <div id="error-message" class="error-message">
+    <div id="error-message" class="error-message" style="display: none;">
         <span id="error-text"></span>
     </div>
 </div>
 
 <style>
     .input-error {
-        border: 2px solid red!important;
+        border: 2px solid red !important;
     }
 
     .error-message {
+        display: none;
         margin-top: 20px;
         padding: 15px;
         border: 1px solid #f5c2c2;
@@ -55,19 +56,17 @@ foreach ($schedules as $schedule) {
         color: #842029;
         font-size: 14px;
         font-weight: bold;
-        position: relative;
         justify-content: center;
-        display: flex;
         align-items: center;
-      width: 100%;
-      text-align: center;
+        width: 100%;
+        text-align: center;
     }
 </style>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const scheduleHours = <?php echo json_encode($schedule_hours); ?>;
-        
+
         const appointmentDateInput = document.getElementById('appointment_date');
         const startTimeInput = document.getElementById('start_time');
         const endTimeInput = document.getElementById('end_time');
@@ -80,7 +79,7 @@ foreach ($schedules as $schedule) {
 
         function showErrorMessage(message) {
             errorText.textContent = message;
-            errorMessage.style.display = 'flex';
+            errorMessage.style.display = 'flex'; 
         }
 
         function hideErrorMessage() {
@@ -100,7 +99,7 @@ foreach ($schedules as $schedule) {
                 clearError(startTimeInput);
                 clearError(endTimeInput);
 
-                startTimeInput.addEventListener('change', function () {
+                startTimeInput.addEventListener('change', function() {
                     clearError(this);
                     hideErrorMessage();
 
@@ -110,11 +109,11 @@ foreach ($schedules as $schedule) {
                     if (userStartTime < availableDay.start_time || (userEndTime && userEndTime > availableDay.end_time)) {
                         this.classList.add('input-error');
                         showErrorMessage("Selected time is outside of the available range for this date. Please select a time between " + availableDay.start_time + " and " + availableDay.end_time);
-                        this.value = ''; 
+                        this.value = '';
                     }
                 });
 
-                endTimeInput.addEventListener('change', function () {
+                endTimeInput.addEventListener('change', function() {
                     clearError(this);
                     hideErrorMessage();
 
@@ -124,7 +123,7 @@ foreach ($schedules as $schedule) {
                     if ((userStartTime && userStartTime < availableDay.start_time) || userEndTime > availableDay.end_time) {
                         this.classList.add('input-error');
                         showErrorMessage("Selected time is outside of the available range for this date. Please select a time between " + availableDay.start_time + " and " + availableDay.end_time);
-                        this.value = ''; 
+                        this.value = '';
                     }
                 });
             } else {
