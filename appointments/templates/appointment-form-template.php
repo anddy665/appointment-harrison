@@ -79,11 +79,11 @@ foreach ($schedules as $schedule) {
 
         function showErrorMessage(message) {
             errorText.textContent = message;
-            errorMessage.style.display = 'flex'; 
+            errorMessage.style.display = 'flex';
         }
 
         function hideErrorMessage() {
-            errorMessage.style.display = 'none'; 
+            errorMessage.style.display = 'none';
             errorText.textContent = '';
         }
 
