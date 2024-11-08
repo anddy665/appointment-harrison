@@ -1,4 +1,5 @@
 <?php
+require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 
 class AppointmentHandler
 {

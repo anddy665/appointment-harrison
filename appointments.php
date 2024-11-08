@@ -25,8 +25,7 @@ require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/AppointmentFormWidget.
 class AppointmentPlugin
 {
     private $dbHandler;
-    public 
-    
+
 
     public function __construct()
     {
