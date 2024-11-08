@@ -1,5 +1,5 @@
 <?php
-
+require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 class AppointmentFormWidget extends WP_Widget
 {
     public function __construct()
@@ -60,7 +60,7 @@ class AppointmentFormWidget extends WP_Widget
 
 
             $wpdb->insert(
-                "{$wpdb->prefix}appointments_schedules",
+                APPOINTMENTS_SCHEDULES_TABLE,
                 [
                     'appointment_id' => $appointment_id,
                     'schedule_id' => $schedule_id
