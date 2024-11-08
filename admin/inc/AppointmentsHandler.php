@@ -1,4 +1,5 @@
 <?php
+
 class AppointmentHandler
 {
     public static function handleFormSubmission()
@@ -16,7 +17,7 @@ class AppointmentHandler
             $description = sanitize_textarea_field($_POST['description']);
 
             $wpdb->update(
-                "{$wpdb->prefix}appointments",
+                APPOINTMENTS_TABLE, 
                 [
                     'full_name' => $full_name,
                     'email' => $email,
@@ -36,7 +37,7 @@ class AppointmentHandler
 
         if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
             $delete_id = intval($_GET['id']);
-            $wpdb->delete("{$wpdb->prefix}appointments", ['id' => $delete_id], ['%d']);
+            $wpdb->delete(APPOINTMENTS_TABLE, ['id' => $delete_id], ['%d']);
 
             wp_redirect(admin_url('admin.php?page=appointments'));
         }
@@ -45,12 +46,12 @@ class AppointmentHandler
     public static function getAppointments()
     {
         global $wpdb;
-        return $wpdb->get_results("SELECT * FROM {$wpdb->prefix}appointments");
+        return $wpdb->get_results("SELECT * FROM " . APPOINTMENTS_TABLE);
     }
 
     public static function getAppointmentById($id)
     {
         global $wpdb;
-        return $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}appointments WHERE id = %d", $id));
+        return $wpdb->get_row($wpdb->prepare("SELECT * FROM " . APPOINTMENTS_TABLE . " WHERE id = %d", $id)); 
     }
 }

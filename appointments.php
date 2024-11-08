@@ -14,6 +14,9 @@ if (!defined('ABSPATH')) {
 define('APPOINTMENTS_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('APPOINTMENTS_PLUGIN_URL', plugin_dir_url(__FILE__));
 
+
+require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
+
 require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/AdminClass.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/AppointmentsClass.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/SchedulesController.php';
@@ -22,6 +25,8 @@ require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/AppointmentFormWidget.
 class AppointmentPlugin
 {
     private $dbHandler;
+    public 
+    
 
     public function __construct()
     {
@@ -43,7 +48,6 @@ class AppointmentPlugin
 
         new AdminClass($this->dbHandler);
     }
-
 
     public function createAppointmentsTables()
     {
@@ -93,7 +97,6 @@ class AppointmentPlugin
         return ob_get_clean();
     }
 
-
     public function handleAppointmentFormSubmission()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_appointment'])) {
@@ -105,8 +108,8 @@ class AppointmentPlugin
             $appointment_date = sanitize_text_field($_POST['appointment_date']);
             $description = sanitize_textarea_field($_POST['description']);
 
-            $table_appointments = $wpdb->prefix . 'appointments';
-            $wpdb->insert($table_appointments, array(
+            
+            $wpdb->insert(APPOINTMENTS_TABLE, array(
                 'full_name' => $full_name,
                 'email' => $email,
                 'phone' => $phone,
@@ -118,6 +121,5 @@ class AppointmentPlugin
         }
     }
 }
-
 
 new AppointmentPlugin();
