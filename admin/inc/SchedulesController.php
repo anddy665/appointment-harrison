@@ -1,6 +1,7 @@
 <?php
 
 require_once 'BaseController.php';
+require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 
 class ScheduleController extends BaseController
 {
@@ -17,7 +18,7 @@ class ScheduleController extends BaseController
         if ($action === 'editSchedule' && isset($_POST['schedule_id'])) {
             $schedule_id = intval($_POST['schedule_id']);
             $schedule_to_edit = $this->wpdb->get_row(
-                $this->wpdb->prepare("SELECT * FROM {$this->wpdb->prefix}schedules WHERE id = %d", $schedule_id)
+                $this->wpdb->prepare("SELECT * FROM ".SCHEDULES_TABLE." WHERE id = %d", $schedule_id)
             );
         }
 
@@ -45,7 +46,7 @@ class ScheduleController extends BaseController
                 'start_time' => sanitize_text_field($_POST['start_time']),
                 'end_time' => sanitize_text_field($_POST['end_time']),
             ];
-            $this->wpdb->insert("{$this->wpdb->prefix}schedules", $schedule_data);
+            $this->wpdb->insert(SCHEDULES_TABLE, $schedule_data);
             wp_redirect(admin_url('admin.php?page=schedules'));
             exit;
         }
@@ -60,7 +61,7 @@ class ScheduleController extends BaseController
                 'start_time' => sanitize_text_field($_POST['start_time']),
                 'end_time' => sanitize_text_field($_POST['end_time']),
             ];
-            $this->wpdb->update("{$this->wpdb->prefix}schedules", $schedule_data, ['id' => $schedule_id]);
+            $this->wpdb->update(SCHEDULES_TABLE, $schedule_data, ['id' => $schedule_id]);
             wp_redirect(admin_url('admin.php?page=schedules'));
             exit;
         }
@@ -71,7 +72,7 @@ class ScheduleController extends BaseController
     {
         if (isset($_POST['schedule_id'])) {
             $schedule_id = intval($_POST['schedule_id']);
-            $this->wpdb->delete("{$this->wpdb->prefix}schedules", ['id' => $schedule_id]);
+            $this->wpdb->delete(SCHEDULES_TABLE, ['id' => $schedule_id]);
             wp_redirect(admin_url('admin.php?page=schedules'));
             exit;
         }
