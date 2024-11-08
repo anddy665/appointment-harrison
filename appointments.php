@@ -19,13 +19,13 @@ require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/AppointmentsClass.php'
 require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/SchedulesController.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/AppointmentFormWidget.php';
 
-class AppointmentsPlugin
+class AppointmentPlugin
 {
     private $dbHandler;
 
     public function __construct()
     {
-        $this->dbHandler = new AppointmentsDatabaseHandler();
+        $this->dbHandler = new AppointmentDatabaseHandler();
         $this->registerHooks();
     }
 
@@ -77,7 +77,7 @@ class AppointmentsPlugin
     public function renderAppointmentsPage()
     {
         global $wpdb;
-        $schedules_controller = new SchedulesController($wpdb);
+        $schedules_controller = new ScheduleController($wpdb);
         $schedules_controller->handleRequest();
     }
 
@@ -120,4 +120,4 @@ class AppointmentsPlugin
 }
 
 
-new AppointmentsPlugin();
+new AppointmentPlugin();

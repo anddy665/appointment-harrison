@@ -14,7 +14,7 @@ class AdminClass extends BaseAdminClass
     private const SCHEDULES_SLUG = 'schedules';
     private const SCHEDULES_TITLE = 'Schedules';
 
-    public function __construct(AppointmentsDatabaseInterface $dbHandler)
+    public function __construct(AppointmentDatabaseInterface $dbHandler)
     {
         $this->dbHandler = $dbHandler;
         add_action('admin_menu', [$this, 'createAdminMenu']);

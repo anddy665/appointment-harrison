@@ -1,5 +1,5 @@
 <?php
-class AppointmentsHandler
+class AppointmentHandler
 {
     public static function handleFormSubmission()
     {

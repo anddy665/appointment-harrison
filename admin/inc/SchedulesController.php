@@ -2,7 +2,7 @@
 
 require_once 'BaseController.php';
 
-class SchedulesController extends BaseController
+class ScheduleController extends BaseController
 {
     public function __construct($wpdb)
     {

@@ -1,13 +1,13 @@
 <?php
 
-interface AppointmentsDatabaseInterface
+interface AppointmentDatabaseInterface
 {
     public function createTables();
     public function dropTables();
 }
 
 
-class AppointmentsDatabaseHandler implements AppointmentsDatabaseInterface
+class AppointmentDatabaseHandler implements AppointmentDatabaseInterface
 {
     public function createTables()
     {

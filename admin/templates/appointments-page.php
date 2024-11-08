@@ -3,13 +3,13 @@
 require_once plugin_dir_path(__FILE__) . '../inc/AppointmentsHandler.php';
 
 
-AppointmentsHandler::handleFormSubmission();
+AppointmentHandler::handleFormSubmission();
 
-$appointments = AppointmentsHandler::getAppointments();
+$appointments = AppointmentHandler::getAppointments();
 
 if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['id'])) {
     $edit_id = intval($_GET['id']);
-    $appointment_to_edit = AppointmentsHandler::getAppointmentById($edit_id);
+    $appointment_to_edit = AppointmentHandler::getAppointmentById($edit_id);
 }
 ?>
 
