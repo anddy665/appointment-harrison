@@ -3,10 +3,17 @@ require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 
 class AppointmentHandler
 {
-    public static function handleFormSubmission()
-    {
-        global $wpdb;
+    private $wpdb;
 
+
+    public function __construct($wpdb)
+    {
+        $this->wpdb = $wpdb;
+    }
+
+
+    public function handleFormSubmission()
+    {
         if (isset($_POST['update_appointment'])) {
             $edit_id = intval($_POST['edit_id']);
             $full_name = sanitize_text_field($_POST['full_name']);
@@ -17,7 +24,8 @@ class AppointmentHandler
             $end_time = sanitize_text_field($_POST['end_time']);
             $description = sanitize_textarea_field($_POST['description']);
 
-            $updated = $wpdb->update(
+
+            $updated = $this->wpdb->update(
                 APPOINTMENTS_TABLE,
                 [
                     'full_name' => $full_name,
@@ -42,7 +50,7 @@ class AppointmentHandler
 
         if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
             $delete_id = intval($_GET['id']);
-            $deleted = $wpdb->delete(APPOINTMENTS_TABLE, ['id' => $delete_id], ['%d']);
+            $deleted = $this->wpdb->delete(APPOINTMENTS_TABLE, ['id' => $delete_id], ['%d']);
 
             if ($deleted === false) {
                 error_log('An error occurred while deleting the appointment with ID ' . $delete_id);
@@ -52,10 +60,10 @@ class AppointmentHandler
         }
     }
 
-    public static function getAppointments()
+
+    public function getAppointments()
     {
-        global $wpdb;
-        $appointments = $wpdb->get_results("SELECT * FROM " . APPOINTMENTS_TABLE);
+        $appointments = $this->wpdb->get_results("SELECT * FROM " . APPOINTMENTS_TABLE);
 
         if ($appointments === false) {
             error_log('An error occurred while retrieving the appointments.');
@@ -64,10 +72,10 @@ class AppointmentHandler
         return $appointments;
     }
 
-    public static function getAppointmentById($id)
+
+    public function getAppointmentById($id)
     {
-        global $wpdb;
-        $appointment = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . APPOINTMENTS_TABLE . " WHERE id = %d", $id));
+        $appointment = $this->wpdb->get_row($this->wpdb->prepare("SELECT * FROM " . APPOINTMENTS_TABLE . " WHERE id = %d", $id));
 
         if ($appointment === null) {
             error_log('No appointment found with ID ' . $id);
