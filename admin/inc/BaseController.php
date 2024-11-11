@@ -12,6 +12,12 @@ class BaseController
     protected function loadTemplate($action, $schedule_to_edit)
     {
         $schedules = $this->getSchedules();
+
+        if ($schedules === false) {
+            error_log('Failed to retrieve schedules from the database.');
+            return;
+        }
+
         get_template_part('templates/schedules-template', null, [
             'action' => $action,
             'schedule_to_edit' => $schedule_to_edit,
@@ -21,6 +27,13 @@ class BaseController
 
     protected function getSchedules()
     {
-        return $this->wpdb->get_results("SELECT * FROM {$this->wpdb->prefix}schedules");
+        $results = $this->wpdb->get_results("SELECT * FROM {$this->wpdb->prefix}schedules");
+
+        if ($results === false) {
+            error_log('Database query failed in getSchedules.');
+            return [];
+        }
+
+        return $results;
     }
 }

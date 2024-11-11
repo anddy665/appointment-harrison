@@ -14,7 +14,6 @@ if (!defined('ABSPATH')) {
 define('APPOINTMENTS_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('APPOINTMENTS_PLUGIN_URL', plugin_dir_url(__FILE__));
 
-
 require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 
 require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/AdminClass.php';
@@ -25,7 +24,6 @@ require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/AppointmentFormWidget.
 class AppointmentPlugin
 {
     private $dbHandler;
-
 
     public function __construct()
     {
@@ -50,12 +48,20 @@ class AppointmentPlugin
 
     public function createAppointmentsTables()
     {
-        $this->dbHandler->createTables();
+        try {
+            $this->dbHandler->createTables();
+        } catch (Exception $e) {
+            error_log('Error creating appointment tables: ' . $e->getMessage());
+        }
     }
 
     public function dropAppointmentsTables()
     {
-        $this->dbHandler->dropTables();
+        try {
+            $this->dbHandler->dropTables();
+        } catch (Exception $e) {
+            error_log('Error dropping appointment tables: ' . $e->getMessage());
+        }
     }
 
     public function enqueueAdminScripts($hook)
@@ -107,16 +113,17 @@ class AppointmentPlugin
             $appointment_date = sanitize_text_field($_POST['appointment_date']);
             $description = sanitize_textarea_field($_POST['description']);
 
-            
-            $wpdb->insert(APPOINTMENTS_TABLE, array(
-                'full_name' => $full_name,
-                'email' => $email,
-                'phone' => $phone,
-                'appointment_date' => $appointment_date,
-                'description' => $description
-            ));
-
-            echo '<p>Cita agendada correctamente</p>';
+            try {
+                $wpdb->insert(APPOINTMENTS_TABLE, array(
+                    'full_name' => $full_name,
+                    'email' => $email,
+                    'phone' => $phone,
+                    'appointment_date' => $appointment_date,
+                    'description' => $description
+                ));
+            } catch (Exception $e) {
+                error_log('Error inserting appointment: ' . $e->getMessage());
+            }
         }
     }
 }

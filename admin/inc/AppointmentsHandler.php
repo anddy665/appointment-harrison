@@ -17,8 +17,8 @@ class AppointmentHandler
             $end_time = sanitize_text_field($_POST['end_time']);
             $description = sanitize_textarea_field($_POST['description']);
 
-            $wpdb->update(
-                APPOINTMENTS_TABLE, 
+            $updated = $wpdb->update(
+                APPOINTMENTS_TABLE,
                 [
                     'full_name' => $full_name,
                     'email' => $email,
@@ -33,26 +33,46 @@ class AppointmentHandler
                 ['%d']
             );
 
-            wp_redirect(admin_url('admin.php?page=appointments'));
+            if ($updated === false) {
+                error_log('An error occurred while updating the appointment with ID ' . $edit_id);
+            } else {
+                wp_redirect(admin_url('admin.php?page=appointments'));
+            }
         }
 
         if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
             $delete_id = intval($_GET['id']);
-            $wpdb->delete(APPOINTMENTS_TABLE, ['id' => $delete_id], ['%d']);
+            $deleted = $wpdb->delete(APPOINTMENTS_TABLE, ['id' => $delete_id], ['%d']);
 
-            wp_redirect(admin_url('admin.php?page=appointments'));
+            if ($deleted === false) {
+                error_log('An error occurred while deleting the appointment with ID ' . $delete_id);
+            } else {
+                wp_redirect(admin_url('admin.php?page=appointments'));
+            }
         }
     }
 
     public static function getAppointments()
     {
         global $wpdb;
-        return $wpdb->get_results("SELECT * FROM " . APPOINTMENTS_TABLE);
+        $appointments = $wpdb->get_results("SELECT * FROM " . APPOINTMENTS_TABLE);
+
+        if ($appointments === false) {
+            error_log('An error occurred while retrieving the appointments.');
+        }
+
+        return $appointments;
     }
 
     public static function getAppointmentById($id)
     {
         global $wpdb;
-        return $wpdb->get_row($wpdb->prepare("SELECT * FROM " . APPOINTMENTS_TABLE . " WHERE id = %d", $id)); 
+        $appointment = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . APPOINTMENTS_TABLE . " WHERE id = %d", $id));
+
+        if ($appointment === null) {
+            error_log('No appointment found with ID ' . $id);
+        }
+
+        return $appointment;
     }
 }

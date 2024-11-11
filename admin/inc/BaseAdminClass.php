@@ -9,8 +9,12 @@ class BaseAdminClass
         if (file_exists($template_path)) {
             if (!empty($args) && is_array($args)) {
                 extract($args);
+            } elseif (!empty($args)) {
+                error_log('The arguments provided to loadTemplate must be an array. Given: ' . print_r($args, true));
             }
             include $template_path;
+        } else {
+            error_log('Template file not found: ' . $template_path);
         }
     }
 }

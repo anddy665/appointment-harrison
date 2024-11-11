@@ -1,5 +1,6 @@
 <?php
 require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
+
 class AppointmentFormWidget extends WP_Widget
 {
     public function __construct()
@@ -21,10 +22,12 @@ class AppointmentFormWidget extends WP_Widget
         $start_time = '';
         $end_time = '';
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['appointment_form_nonce']) && wp_verify_nonce($_POST['appointment_form_nonce'], 'submit_appointment_form')) {
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_form_nonce']) && wp_verify_nonce($_POST['appointment_form_nonce'], 'submit_appointment_form')) {
             $this->handleFormSubmission($full_name, $email, $phone, $description, $appointment_date, $start_time, $end_time);
         }
 
+        
         echo $args['before_widget'];
         include plugin_dir_path(__FILE__) . '../templates/appointment-form-template.php';
         echo $args['after_widget'];
@@ -34,6 +37,7 @@ class AppointmentFormWidget extends WP_Widget
     {
         global $wpdb;
 
+        
         $full_name = sanitize_text_field($_POST['full_name']);
         $email = sanitize_email($_POST['email']);
         $phone = sanitize_text_field($_POST['phone']);
@@ -51,31 +55,35 @@ class AppointmentFormWidget extends WP_Widget
             $day_of_week
         ));
 
-
         if ($schedule) {
             $schedule_id = $schedule->id;
 
-
+ 
             $appointment_id = $this->insertAppointment($full_name, $email, $phone, $appointment_date, $start_time, $end_time, $description);
 
+            if ($appointment_id) {
+                $inserted = $wpdb->insert(
+                    APPOINTMENTS_SCHEDULES_TABLE,
+                    [
+                        'appointment_id' => $appointment_id,
+                        'schedule_id' => $schedule_id
+                    ],
+                    ['%d', '%d']
+                );
 
-            $wpdb->insert(
-                APPOINTMENTS_SCHEDULES_TABLE,
-                [
-                    'appointment_id' => $appointment_id,
-                    'schedule_id' => $schedule_id
-                ],
-                ['%d', '%d']
-            );
-
-
-            $full_name = '';
-            $email = '';
-            $phone = '';
-            $description = '';
-            $appointment_date = '';
-            $start_time = '';
-            $end_time = '';
+                if ($inserted === false) {
+                    error_log('Failed to link appointment ID ' . $appointment_id . ' with schedule ID ' . $schedule_id);
+                }
+                $full_name = '';
+                $email = '';
+                $phone = '';
+                $description = '';
+                $appointment_date = '';
+                $start_time = '';
+                $end_time = '';
+            } else {
+                error_log('Failed to insert appointment.');
+            }
         } else {
             error_log('No schedule available for the selected date.');
         }
@@ -86,7 +94,7 @@ class AppointmentFormWidget extends WP_Widget
         global $wpdb;
 
         $table = $wpdb->prefix . 'appointments';
-        $wpdb->insert(
+        $inserted = $wpdb->insert(
             $table,
             [
                 'full_name' => $full_name,
@@ -99,6 +107,11 @@ class AppointmentFormWidget extends WP_Widget
             ],
             ['%s', '%s', '%s', '%s', '%s', '%s', '%s']
         );
+
+        if ($inserted === false) {
+            error_log('Failed to insert appointment with name: ' . $full_name);
+            return false;
+        }
 
         return $wpdb->insert_id;
     }

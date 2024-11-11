@@ -18,8 +18,12 @@ class ScheduleController extends BaseController
         if ($action === 'editSchedule' && isset($_POST['schedule_id'])) {
             $schedule_id = intval($_POST['schedule_id']);
             $schedule_to_edit = $this->wpdb->get_row(
-                $this->wpdb->prepare("SELECT * FROM ".SCHEDULES_TABLE." WHERE id = %d", $schedule_id)
+                $this->wpdb->prepare("SELECT * FROM " . SCHEDULES_TABLE . " WHERE id = %d", $schedule_id)
             );
+
+            if ($schedule_to_edit === null) {
+                error_log('Failed to retrieve schedule with ID ' . $schedule_id);
+            }
         }
 
         switch ($action) {
@@ -46,9 +50,13 @@ class ScheduleController extends BaseController
                 'start_time' => sanitize_text_field($_POST['start_time']),
                 'end_time' => sanitize_text_field($_POST['end_time']),
             ];
-            $this->wpdb->insert(SCHEDULES_TABLE, $schedule_data);
-            wp_redirect(admin_url('admin.php?page=schedules'));
-            exit;
+
+            $inserted = $this->wpdb->insert(SCHEDULES_TABLE, $schedule_data);
+            if ($inserted === false) {
+                error_log('Failed to create a new schedule.');
+            } else {
+                wp_redirect(admin_url('admin.php?page=schedules'));
+            }
         }
     }
 
@@ -61,20 +69,26 @@ class ScheduleController extends BaseController
                 'start_time' => sanitize_text_field($_POST['start_time']),
                 'end_time' => sanitize_text_field($_POST['end_time']),
             ];
-            $this->wpdb->update(SCHEDULES_TABLE, $schedule_data, ['id' => $schedule_id]);
-            wp_redirect(admin_url('admin.php?page=schedules'));
-            exit;
+
+            $updated = $this->wpdb->update(SCHEDULES_TABLE, $schedule_data, ['id' => $schedule_id]);
+            if ($updated === false) {
+                error_log('Failed to update the schedule with ID ' . $schedule_id);
+            } else {
+                wp_redirect(admin_url('admin.php?page=schedules'));
+            }
         }
     }
-
 
     private function deleteSchedule()
     {
         if (isset($_POST['schedule_id'])) {
             $schedule_id = intval($_POST['schedule_id']);
-            $this->wpdb->delete(SCHEDULES_TABLE, ['id' => $schedule_id]);
-            wp_redirect(admin_url('admin.php?page=schedules'));
-            exit;
+            $deleted = $this->wpdb->delete(SCHEDULES_TABLE, ['id' => $schedule_id]);
+            if ($deleted === false) {
+                error_log('Failed to delete the schedule with ID ' . $schedule_id);
+            } else {
+                wp_redirect(admin_url('admin.php?page=schedules'));
+            }
         }
     }
 }
