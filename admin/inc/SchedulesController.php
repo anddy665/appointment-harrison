@@ -55,7 +55,7 @@ class ScheduleController extends BaseController
             if ($inserted === false) {
                 error_log('Failed to create a new schedule.');
             } else {
-                wp_redirect(admin_url('admin.php?page=schedules'));
+                wp_redirect(admin_url('admin.php?page=' . SCHEDULES_SLUG));
             }
         }
     }
@@ -74,7 +74,7 @@ class ScheduleController extends BaseController
             if ($updated === false) {
                 error_log('Failed to update the schedule with ID ' . $schedule_id);
             } else {
-                wp_redirect(admin_url('admin.php?page=schedules'));
+                wp_redirect(admin_url('admin.php?page=' . SCHEDULES_SLUG));
             }
         }
     }
@@ -87,7 +87,7 @@ class ScheduleController extends BaseController
             if ($deleted === false) {
                 error_log('Failed to delete the schedule with ID ' . $schedule_id);
             } else {
-                wp_redirect(admin_url('admin.php?page=schedules'));
+                wp_redirect(admin_url('admin.php?page=' . SCHEDULES_SLUG));
             }
         }
     }
