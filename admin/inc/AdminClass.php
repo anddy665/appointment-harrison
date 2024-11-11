@@ -4,14 +4,14 @@
 <?php
 
 require_once 'BaseAdminClass.php';
+require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 
 class AdminClass extends BaseAdminClass
 {
     private $dbHandler;
 
-    private const MENU_SLUG = 'appointments';
+
     private const MENU_TITLE = 'Appointments';
-    private const SCHEDULES_SLUG = 'schedules';
     private const SCHEDULES_TITLE = 'Schedules';
 
     public function __construct(AppointmentDatabaseInterface $dbHandler)
@@ -26,27 +26,27 @@ class AdminClass extends BaseAdminClass
             self::MENU_TITLE,
             self::MENU_TITLE,
             'manage_options',
-            self::MENU_SLUG,
+            MENU_SLUG,
             [$this, 'appointmentsPageContent'],
             'dashicons-calendar',
             20
         );
 
         add_submenu_page(
-            self::MENU_SLUG,
+            MENU_SLUG,
             self::MENU_TITLE,
             self::MENU_TITLE,
             'manage_options',
-            self::MENU_SLUG,
+            MENU_SLUG,
             [$this, 'appointmentsPageContent']
         );
 
         add_submenu_page(
-            self::MENU_SLUG,
+            MENU_SLUG,
             self::SCHEDULES_TITLE,
             self::SCHEDULES_TITLE,
             'manage_options',
-            self::SCHEDULES_SLUG,
+            SCHEDULES_SLUG,
             [$this, 'schedulesPageContent']
         );
     }
@@ -88,7 +88,7 @@ class AdminClass extends BaseAdminClass
                             $this->showNotice('Failed to update schedule: ' . $wpdb->last_error, 'notice-error');
                         } else {
                             $this->showNotice('Schedule updated successfully.', 'notice-success');
-                            wp_redirect(admin_url('admin.php?page=' . self::SCHEDULES_SLUG));
+                            wp_redirect(admin_url('admin.php?page=' . SCHEDULES_SLUG));
                         }
                     } else {
                         $this->showNotice('Security check failed.', 'notice-error');

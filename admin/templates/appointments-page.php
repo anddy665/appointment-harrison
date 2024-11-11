@@ -1,7 +1,7 @@
 <?php
 
 require_once plugin_dir_path(__FILE__) . '../inc/AppointmentsHandler.php';
-
+require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 
 global $wpdb;
 $appointmentHandler = new AppointmentHandler($wpdb);
@@ -49,7 +49,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['id'])) {
             <textarea name="description" required><?= esc_textarea($appointment_to_edit->description); ?></textarea>
 
             <input type="submit" name="update_appointment" value="Update Appointment">
-            <a href="<?= admin_url('admin.php?page=appointments'); ?>" class="button">Cancel</a>
+            <a href="<?= admin_url('admin.php?page='.MENU_SLUG); ?>" class="button">Cancel</a>
         </form>
     <?php endif; ?>
 
