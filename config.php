@@ -7,4 +7,3 @@ define('APPOINTMENTS_SCHEDULES_TABLE', $wpdb->prefix . 'appointments_schedules')
 
 define('SCHEDULES_SLUG', 'schedules');
 define('MENU_SLUG', 'appointments');
-

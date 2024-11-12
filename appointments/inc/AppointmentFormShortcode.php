@@ -9,7 +9,6 @@ class AppointmentFormShortcode
     {
         global $wpdb;
         $this->wpdb = $wpdb;
-        
     }
 
     public function renderForm()

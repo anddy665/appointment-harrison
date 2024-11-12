@@ -42,25 +42,25 @@ class AppointmentPlugin
 
 
     private function registerActivationHooks()
-{
-    register_activation_hook(__FILE__, [$this, 'createAppointmentsTables']);
-    register_deactivation_hook(__FILE__, [$this, 'dropAppointmentsTables']);
-}
+    {
+        register_activation_hook(__FILE__, [$this, 'createAppointmentsTables']);
+        register_deactivation_hook(__FILE__, [$this, 'dropAppointmentsTables']);
+    }
 
-private function registerShortcodes()
-{
-    add_shortcode('appointment_form', [$this, 'renderAppointmentFormShortcode']);
-}
+    private function registerShortcodes()
+    {
+        add_shortcode('appointment_form', [$this, 'renderAppointmentFormShortcode']);
+    }
 
-private function registerAdminHooks()
-{
-    add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
-}
+    private function registerAdminHooks()
+    {
+        add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
+    }
 
-private function registerFormSubmissionHooks()
-{
-    add_action('init', [$this, 'handleAppointmentFormSubmission']);
-}
+    private function registerFormSubmissionHooks()
+    {
+        add_action('init', [$this, 'handleAppointmentFormSubmission']);
+    }
 
 
     public function createAppointmentsTables()
