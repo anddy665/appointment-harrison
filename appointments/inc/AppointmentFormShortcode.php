@@ -1,24 +1,18 @@
 <?php
 require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 
-class AppointmentFormWidget extends WP_Widget
+class AppointmentFormShortcode
 {
     private $wpdb;
 
     public function __construct()
     {
-        parent::__construct(
-            'AppointmentFormWidget',
-            __('Appointment Form Widget', 'text_domain'),
-            array('description' => __('A widget to capture appointment information', 'text_domain'))
-        );
-
-
         global $wpdb;
         $this->wpdb = $wpdb;
+        
     }
 
-    public function widget($args, $instance)
+    public function renderForm()
     {
         $full_name = '';
         $email = '';
@@ -32,9 +26,9 @@ class AppointmentFormWidget extends WP_Widget
             $this->handleFormSubmission($full_name, $email, $phone, $description, $appointment_date, $start_time, $end_time);
         }
 
-        echo $args['before_widget'];
+        ob_start();
         include plugin_dir_path(__FILE__) . '../templates/appointment-form-template.php';
-        echo $args['after_widget'];
+        return ob_get_clean();
     }
 
     private function handleFormSubmission(&$full_name, &$email, &$phone, &$description, &$appointment_date, &$start_time, &$end_time)
@@ -112,3 +106,5 @@ class AppointmentFormWidget extends WP_Widget
         return $this->wpdb->insert_id;
     }
 }
+
+new AppointmentFormShortcode();

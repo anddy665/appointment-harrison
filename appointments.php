@@ -19,7 +19,7 @@ require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/AdminClass.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/AppointmentsClass.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/SchedulesController.php';
-require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/AppointmentFormWidget.php';
+require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/AppointmentFormShortcode.php';
 
 class AppointmentPlugin
 {
@@ -36,8 +36,8 @@ class AppointmentPlugin
         register_activation_hook(__FILE__, [$this, 'createAppointmentsTables']);
         register_deactivation_hook(__FILE__, [$this, 'dropAppointmentsTables']);
 
-        add_action('widgets_init', [$this, 'registerAppointmentFormWidget']);
         add_shortcode('appointment_form', [$this, 'renderAppointmentFormShortcode']);
+
 
         add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
 
@@ -90,17 +90,13 @@ class AppointmentPlugin
         $schedules_controller->handleRequest();
     }
 
-    public function registerAppointmentFormWidget()
-    {
-        register_widget('AppointmentFormWidget');
-    }
 
     public function renderAppointmentFormShortcode()
     {
-        ob_start();
-        the_widget('AppointmentFormWidget');
-        return ob_get_clean();
+        $shortcodeHandler = new AppointmentFormShortcode();
+        return $shortcodeHandler->renderForm();
     }
+
 
     public function handleAppointmentFormSubmission()
     {
