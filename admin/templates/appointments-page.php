@@ -1,6 +1,7 @@
 <?php
 
-require_once plugin_dir_path(__FILE__) . '../inc/AppointmentsHandler.php';
+
+require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/AppointmentsHandler.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 
 global $wpdb;
