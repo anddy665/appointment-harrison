@@ -6,12 +6,9 @@ require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 global $wpdb;
 $appointmentHandler = new AppointmentHandler($wpdb);
 
-
 $appointmentHandler->handleFormSubmission();
 
-
 $appointments = $appointmentHandler->getAppointments();
-
 
 if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['id'])) {
     $edit_id = intval($_GET['id']);
