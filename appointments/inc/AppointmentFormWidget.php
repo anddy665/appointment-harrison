@@ -3,6 +3,8 @@ require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 
 class AppointmentFormWidget extends WP_Widget
 {
+    private $wpdb;
+
     public function __construct()
     {
         parent::__construct(
@@ -10,6 +12,10 @@ class AppointmentFormWidget extends WP_Widget
             __('Appointment Form Widget', 'text_domain'),
             array('description' => __('A widget to capture appointment information', 'text_domain'))
         );
+
+
+        global $wpdb;
+        $this->wpdb = $wpdb;
     }
 
     public function widget($args, $instance)
@@ -22,12 +28,10 @@ class AppointmentFormWidget extends WP_Widget
         $start_time = '';
         $end_time = '';
 
-        
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_form_nonce']) && wp_verify_nonce($_POST['appointment_form_nonce'], 'submit_appointment_form')) {
             $this->handleFormSubmission($full_name, $email, $phone, $description, $appointment_date, $start_time, $end_time);
         }
 
-        
         echo $args['before_widget'];
         include plugin_dir_path(__FILE__) . '../templates/appointment-form-template.php';
         echo $args['after_widget'];
@@ -35,9 +39,6 @@ class AppointmentFormWidget extends WP_Widget
 
     private function handleFormSubmission(&$full_name, &$email, &$phone, &$description, &$appointment_date, &$start_time, &$end_time)
     {
-        global $wpdb;
-
-        
         $full_name = sanitize_text_field($_POST['full_name']);
         $email = sanitize_email($_POST['email']);
         $phone = sanitize_text_field($_POST['phone']);
@@ -46,23 +47,20 @@ class AppointmentFormWidget extends WP_Widget
         $start_time = sanitize_text_field($_POST['start_time']);
         $end_time = sanitize_text_field($_POST['end_time']);
 
-
         $day_of_week = date('w', strtotime($appointment_date));
 
-
-        $schedule = $wpdb->get_row($wpdb->prepare(
-            "SELECT id FROM {$wpdb->prefix}schedules WHERE schedule_date = %d",
+        $schedule = $this->wpdb->get_row($this->wpdb->prepare(
+            "SELECT id FROM {$this->wpdb->prefix}schedules WHERE schedule_date = %d",
             $day_of_week
         ));
 
         if ($schedule) {
             $schedule_id = $schedule->id;
 
- 
             $appointment_id = $this->insertAppointment($full_name, $email, $phone, $appointment_date, $start_time, $end_time, $description);
 
             if ($appointment_id) {
-                $inserted = $wpdb->insert(
+                $inserted = $this->wpdb->insert(
                     APPOINTMENTS_SCHEDULES_TABLE,
                     [
                         'appointment_id' => $appointment_id,
@@ -91,10 +89,8 @@ class AppointmentFormWidget extends WP_Widget
 
     public function insertAppointment($full_name, $email, $phone, $appointment_date, $start_time, $end_time, $description)
     {
-        global $wpdb;
-
-        $table = $wpdb->prefix . 'appointments';
-        $inserted = $wpdb->insert(
+        $table = $this->wpdb->prefix . 'appointments';
+        $inserted = $this->wpdb->insert(
             $table,
             [
                 'full_name' => $full_name,
@@ -113,6 +109,6 @@ class AppointmentFormWidget extends WP_Widget
             return false;
         }
 
-        return $wpdb->insert_id;
+        return $this->wpdb->insert_id;
     }
 }

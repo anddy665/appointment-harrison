@@ -12,17 +12,19 @@ class AppointmentHandler
     }
 
 
-    public function handleFormSubmission() {
+    public function handleFormSubmission()
+    {
         if (isset($_POST['update_appointment'])) {
             $this->updateAppointment();
         }
-    
+
         if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
             $this->deleteAppointment();
         }
     }
-    
-    private function updateAppointment() {
+
+    private function updateAppointment()
+    {
         $edit_id = intval($_POST['edit_id']);
         $full_name = sanitize_text_field($_POST['full_name']);
         $email = sanitize_email($_POST['email']);
@@ -31,7 +33,7 @@ class AppointmentHandler
         $start_time = sanitize_text_field($_POST['start_time']);
         $end_time = sanitize_text_field($_POST['end_time']);
         $description = sanitize_textarea_field($_POST['description']);
-    
+
         $updated = $this->wpdb->update(
             APPOINTMENTS_TABLE,
             [
@@ -47,27 +49,26 @@ class AppointmentHandler
             ['%s', '%s', '%s', '%s', '%s', '%s', '%s'],
             ['%d']
         );
-    
+
         if ($updated === false) {
             error_log('An error occurred while updating the appointment with ID ' . $edit_id);
         } else {
             wp_redirect(admin_url('admin.php?page=appointments'));
-            exit;
         }
     }
-    
-    private function deleteAppointment() {
+
+    private function deleteAppointment()
+    {
         $delete_id = intval($_GET['id']);
         $deleted = $this->wpdb->delete(APPOINTMENTS_TABLE, ['id' => $delete_id], ['%d']);
-    
+
         if ($deleted === false) {
             error_log('An error occurred while deleting the appointment with ID ' . $delete_id);
         } else {
             wp_redirect(admin_url('admin.php?page=appointments'));
-            exit;
         }
     }
-    
+
 
 
     public function getAppointments()
