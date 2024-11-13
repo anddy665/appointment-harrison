@@ -80,9 +80,13 @@ class AppointmentFormShortcode
         }
     }
 
+
     public function insertAppointment($full_name, $email, $phone, $appointment_date, $start_time, $end_time, $description)
     {
+
         $table = $this->wpdb->prefix . 'appointments';
+
+
         $inserted = $this->wpdb->insert(
             $table,
             [
@@ -97,8 +101,9 @@ class AppointmentFormShortcode
             ['%s', '%s', '%s', '%s', '%s', '%s', '%s']
         );
 
+
         if ($inserted === false) {
-            error_log('Failed to insert appointment with name: ' . $full_name);
+            error_log('Failed to insert appointment for: ' . $full_name);
             return false;
         }
 

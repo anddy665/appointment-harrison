@@ -75,31 +75,4 @@ class AppointmentDatabaseHandler implements AppointmentDatabaseInterface
         $sql = "DROP TABLE IF EXISTS $table_appointments_schedules, $table_appointments, $table_schedules;";
         $wpdb->query($sql);
     }
-
-    public function insertAppointment($full_name, $email, $phone, $appointment_date, $start_time, $end_time, $description)
-    {
-        global $wpdb;
-
-        $table = $wpdb->prefix . 'appointments';
-        $result = $wpdb->insert(
-            $table,
-            [
-                'full_name' => $full_name,
-                'email' => $email,
-                'phone' => $phone,
-                'appointment_date' => $appointment_date,
-                'start_time' => $start_time,
-                'end_time' => $end_time,
-                'description' => $description,
-            ],
-            ['%s', '%s', '%s', '%s', '%s', '%s', '%s']
-        );
-
-        if ($result === false) {
-            error_log('Failed to insert appointment for: ' . $full_name);
-            return false;
-        }
-
-        return $wpdb->insert_id;
-    }
 }

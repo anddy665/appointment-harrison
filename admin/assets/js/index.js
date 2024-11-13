@@ -5,7 +5,3 @@ jQuery(document).ready(function ($) {
         notice.stop(true, true).fadeIn('fast');
     });
 });
-
-
-
-
