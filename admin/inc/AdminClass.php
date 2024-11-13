@@ -65,7 +65,7 @@ class AdminClass extends BaseAdminClass
     public function schedulesPageContent()
     {
         global $wpdb;
-        $table_schedules = $wpdb->prefix . 'schedules';
+
 
         $schedule_id = isset($_POST['schedule_id']) ? intval($_POST['schedule_id']) : null;
         $schedule_date = isset($_POST['schedule_date']) ? sanitize_text_field($_POST['schedule_date']) : null;
@@ -77,7 +77,7 @@ class AdminClass extends BaseAdminClass
                 case 'edit_schedule':
                     if ($schedule_id && isset($_POST['edit_schedule_nonce_field']) && wp_verify_nonce($_POST['edit_schedule_nonce_field'], 'edit_schedule_nonce')) {
                         $wpdb->update(
-                            $table_schedules,
+                            SCHEDULES_TABLE,
                             ['schedule_date' => $schedule_date, 'start_time' => $start_time, 'end_time' => $end_time],
                             ['id' => $schedule_id]
                         );
@@ -94,7 +94,7 @@ class AdminClass extends BaseAdminClass
 
                 case 'create_schedule':
                     if (isset($_POST['create_schedule_nonce_field']) && wp_verify_nonce($_POST['create_schedule_nonce_field'], 'create_schedule_nonce')) {
-                        $wpdb->insert($table_schedules, [
+                        $wpdb->insert(SCHEDULES_TABLE, [
                             'schedule_date' => $schedule_date,
                             'start_time' => $start_time,
                             'end_time' => $end_time
@@ -111,7 +111,7 @@ class AdminClass extends BaseAdminClass
 
                 case 'delete_schedule':
                     if ($schedule_id && isset($_POST['delete_schedule_nonce_field']) && wp_verify_nonce($_POST['delete_schedule_nonce_field'], 'delete_schedule_nonce')) {
-                        $wpdb->delete($table_schedules, ['id' => $schedule_id]);
+                        $wpdb->delete(SCHEDULES_TABLE, ['id' => $schedule_id]);
                         if ($wpdb->last_error) {
                             $this->showNotice('Failed to delete schedule: ' . $wpdb->last_error, 'notice-error');
                         } else {
