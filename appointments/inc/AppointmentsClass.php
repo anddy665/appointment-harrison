@@ -1,10 +1,7 @@
 <?php
 
-interface AppointmentDatabaseInterface
-{
-    public function createTables();
-    public function dropTables();
-}
+
+require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/interfaces/AppointmentDatabaseInterface.php';
 
 class AppointmentDatabaseHandler implements AppointmentDatabaseInterface
 {
