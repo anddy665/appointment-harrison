@@ -1,6 +1,6 @@
 <?php
 
-
+require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/interfaces/AppointmentDatabaseInterface.php';
 
 class AppointmentDatabaseHandler implements AppointmentDatabaseInterface
@@ -9,9 +9,9 @@ class AppointmentDatabaseHandler implements AppointmentDatabaseInterface
     {
         global $wpdb;
 
-        $table_appointments = $wpdb->prefix . 'appointments';
-        $table_schedules = $wpdb->prefix . 'schedules';
-        $table_appointments_schedules = $wpdb->prefix . 'appointments_schedules';
+        $table_appointments = MENU_SLUG;
+        $table_schedules = SCHEDULES_TABLE;
+        $table_appointments_schedules = APPOINTMENTS_SCHEDULES_TABLE;
 
         $charset_collate = $wpdb->get_charset_collate();
 
@@ -64,9 +64,9 @@ class AppointmentDatabaseHandler implements AppointmentDatabaseInterface
     {
         global $wpdb;
 
-        $table_appointments = $wpdb->prefix . 'appointments';
-        $table_schedules = $wpdb->prefix . 'schedules';
-        $table_appointments_schedules = $wpdb->prefix . 'appointments_schedules';
+        $table_appointments = APPOINTMENTS_TABLE;
+        $table_schedules = SCHEDULES_TABLE;
+        $table_appointments_schedules = APPOINTMENTS_SCHEDULES_TABLE;
 
 
         $sql = "DROP TABLE IF EXISTS $table_appointments_schedules, $table_appointments, $table_schedules;";
