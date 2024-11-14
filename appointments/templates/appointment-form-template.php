@@ -3,8 +3,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
+
 global $wpdb;
-$schedules = $wpdb->get_results("SELECT id, schedule_date, start_time, end_time FROM {$wpdb->prefix}schedules");
+$schedules = $wpdb->get_results("SELECT id, schedule_date, start_time, end_time FROM {$wpdb->prefix}" . SCHEDULES_SLUG);
 
 $schedule_hours = [];
 foreach ($schedules as $schedule) {
