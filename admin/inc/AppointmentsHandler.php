@@ -5,7 +5,6 @@ class AppointmentHandler
 {
     private $wpdb;
 
-
     public function __construct($wpdb)
     {
         $this->wpdb = $wpdb;
@@ -14,18 +13,24 @@ class AppointmentHandler
 
     public function handleFormSubmission()
     {
-        if (isset($_POST['update_appointment'])) {
+        if (isset($_POST['update_appointment']) && !empty($_POST['edit_id'])) {
             $this->updateAppointment();
         }
 
-        if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
+        if (isset($_GET['action'], $_GET['id']) && $_GET['action'] === 'delete') {
             $this->deleteAppointment();
         }
     }
 
+
     private function updateAppointment()
     {
         $edit_id = intval($_POST['edit_id']);
+        if ($edit_id <= 0) {
+            error_log('Invalid appointment ID for update.');
+            return;
+        }
+
         $full_name = sanitize_text_field($_POST['full_name']);
         $email = sanitize_email($_POST['email']);
         $phone = sanitize_text_field($_POST['phone']);
@@ -52,24 +57,31 @@ class AppointmentHandler
 
         if ($updated === false) {
             error_log('An error occurred while updating the appointment with ID ' . $edit_id);
+        } elseif ($updated === 0) {
+            error_log('No changes made while updating the appointment with ID ' . $edit_id);
         } else {
-            wp_redirect(admin_url('admin.php?page='.MENU_SLUG));
+            wp_redirect(admin_url('admin.php?page=' . MENU_SLUG));
         }
     }
 
     private function deleteAppointment()
     {
         $delete_id = intval($_GET['id']);
+        if ($delete_id <= 0) {
+            error_log('Invalid appointment ID for deletion.');
+            return;
+        }
+
         $deleted = $this->wpdb->delete(APPOINTMENTS_TABLE, ['id' => $delete_id], ['%d']);
 
         if ($deleted === false) {
             error_log('An error occurred while deleting the appointment with ID ' . $delete_id);
+        } elseif ($deleted === 0) {
+            error_log('No appointment found to delete with ID ' . $delete_id);
         } else {
-            wp_redirect(admin_url('admin.php?page='.MENU_SLUG));
+            wp_redirect(admin_url('admin.php?page=' . MENU_SLUG));
         }
     }
-
-
 
     public function getAppointments()
     {
@@ -77,10 +89,12 @@ class AppointmentHandler
 
         if ($appointments === false) {
             error_log('An error occurred while retrieving the appointments.');
+            return [];
         }
 
-        return $appointments;
+        return $appointments ?: [];
     }
+
 
 
     public function getAppointmentById($id)
@@ -89,6 +103,7 @@ class AppointmentHandler
 
         if ($appointment === null) {
             error_log('No appointment found with ID ' . $id);
+            return null;
         }
 
         return $appointment;
