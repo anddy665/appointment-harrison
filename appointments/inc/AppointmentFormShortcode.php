@@ -88,7 +88,6 @@ class AppointmentFormShortcode
 
         $table = $this->wpdb->prefix . 'appointments';
 
-
         $inserted = $this->wpdb->insert(
             $table,
             [
@@ -102,7 +101,6 @@ class AppointmentFormShortcode
             ],
             ['%s', '%s', '%s', '%s', '%s', '%s', '%s']
         );
-
 
         if ($inserted === false) {
             error_log('Failed to insert appointment for: ' . $full_name);

@@ -7,7 +7,6 @@ class AdminClass extends BaseAdminClass
 {
     private $dbHandler;
 
-
     private const MENU_TITLE = 'Appointments';
     private const SCHEDULES_TITLE = 'Schedules';
 

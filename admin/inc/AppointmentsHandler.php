@@ -36,7 +36,7 @@ class AppointmentHandler
         $start_time = sanitize_text_field($_POST['start_time']);
         $end_time = sanitize_text_field($_POST['end_time']);
         $description = sanitize_textarea_field($_POST['description']);
-
+        
         $updated = $this->wpdb->update(
             APPOINTMENTS_TABLE,
             [
