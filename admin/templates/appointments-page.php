@@ -78,9 +78,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['id'])) {
                         <td><?= esc_html($appointment->end_time); ?></td>
                         <td><?= esc_html($appointment->description); ?></td>
                         <td>
-                            <a href="?page=appointments&action=edit&id=<?= esc_attr($appointment->id); ?>" class="button">Edit</a>
-                            <a href="?page=appointments&action=delete&id=<?= esc_attr($appointment->id); ?>" class="button" onclick="return confirm('Are you sure you want to delete this appointment?');">Delete</a>
+                            <a href="?page=<?= MENU_SLUG; ?>&action=edit&id=<?= esc_attr($appointment->id); ?>" class="button">Edit</a>
+                            <a href="?page=<?= MENU_SLUG; ?>&action=delete&id=<?= esc_attr($appointment->id); ?>" class="button" onclick="return confirm('Are you sure you want to delete this appointment?');">Delete</a>
                         </td>
+
                     </tr>
                 <?php endforeach; ?>
             </tbody>

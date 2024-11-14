@@ -130,7 +130,6 @@ class AdminClass extends BaseAdminClass
             $schedule_to_edit = $wpdb->get_row(
                 $wpdb->prepare("SELECT * FROM " . SCHEDULES_TABLE . " WHERE id = %d", $schedule_id)
             );
-            
         }
 
 

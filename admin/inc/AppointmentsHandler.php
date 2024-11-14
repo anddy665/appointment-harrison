@@ -53,7 +53,7 @@ class AppointmentHandler
         if ($updated === false) {
             error_log('An error occurred while updating the appointment with ID ' . $edit_id);
         } else {
-            wp_redirect(admin_url('admin.php?page=appointments'));
+            wp_redirect(admin_url('admin.php?page='.MENU_SLUG));
         }
     }
 
@@ -65,7 +65,7 @@ class AppointmentHandler
         if ($deleted === false) {
             error_log('An error occurred while deleting the appointment with ID ' . $delete_id);
         } else {
-            wp_redirect(admin_url('admin.php?page=appointments'));
+            wp_redirect(admin_url('admin.php?page='.MENU_SLUG));
         }
     }
 
