@@ -23,6 +23,7 @@ class ScheduleController extends BaseController
 
             if ($schedule_to_edit === null) {
                 error_log('Failed to retrieve schedule with ID ' . $schedule_id);
+                return;
             }
         }
 
@@ -54,6 +55,7 @@ class ScheduleController extends BaseController
             $inserted = $this->wpdb->insert(SCHEDULES_TABLE, $schedule_data);
             if ($inserted === false) {
                 error_log('Failed to create a new schedule.');
+                return;
             } else {
                 wp_redirect(admin_url('admin.php?page=' . SCHEDULES_SLUG));
             }
@@ -73,6 +75,7 @@ class ScheduleController extends BaseController
             $updated = $this->wpdb->update(SCHEDULES_TABLE, $schedule_data, ['id' => $schedule_id]);
             if ($updated === false) {
                 error_log('Failed to update the schedule with ID ' . $schedule_id);
+                return;
             } else {
                 wp_redirect(admin_url('admin.php?page=' . SCHEDULES_SLUG));
             }
@@ -86,6 +89,7 @@ class ScheduleController extends BaseController
             $deleted = $this->wpdb->delete(SCHEDULES_TABLE, ['id' => $schedule_id]);
             if ($deleted === false) {
                 error_log('Failed to delete the schedule with ID ' . $schedule_id);
+                return;
             } else {
                 wp_redirect(admin_url('admin.php?page=' . SCHEDULES_SLUG));
             }

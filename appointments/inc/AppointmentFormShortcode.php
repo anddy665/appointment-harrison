@@ -64,6 +64,7 @@ class AppointmentFormShortcode
 
                 if ($inserted === false) {
                     error_log('Failed to link appointment ID ' . $appointment_id . ' with schedule ID ' . $schedule_id);
+                    return;
                 }
                 $full_name = '';
                 $email = '';
@@ -74,9 +75,11 @@ class AppointmentFormShortcode
                 $end_time = '';
             } else {
                 error_log('Failed to insert appointment.');
+                return;
             }
         } else {
             error_log('No schedule available for the selected date.');
+            return;
         }
     }
 

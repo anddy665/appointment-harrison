@@ -136,9 +136,11 @@ class AppointmentPlugin
                 ));
             } catch (Exception $e) {
                 error_log('Error inserting appointment: ' . $e->getMessage());
+                return;
             }
         }
     }
 }
 
 new AppointmentPlugin();
+

@@ -57,8 +57,10 @@ class AppointmentHandler
 
         if ($updated === false) {
             error_log('An error occurred while updating the appointment with ID ' . $edit_id);
+            return;
         } elseif ($updated === 0) {
             error_log('No changes made while updating the appointment with ID ' . $edit_id);
+            return;
         } else {
             wp_redirect(admin_url('admin.php?page=' . MENU_SLUG));
         }
@@ -76,8 +78,10 @@ class AppointmentHandler
 
         if ($deleted === false) {
             error_log('An error occurred while deleting the appointment with ID ' . $delete_id);
+            return;
         } elseif ($deleted === 0) {
             error_log('No appointment found to delete with ID ' . $delete_id);
+            return;
         } else {
             wp_redirect(admin_url('admin.php?page=' . MENU_SLUG));
         }
