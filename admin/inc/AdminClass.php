@@ -20,6 +20,7 @@ class AdminClass extends BaseAdminClass
     public function createAdminMenu()
     {
         add_menu_page(
+
             self::MENU_TITLE,
             self::MENU_TITLE,
             'manage_options',
@@ -127,12 +128,14 @@ class AdminClass extends BaseAdminClass
         if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['schedule_id'])) {
             $schedule_id = intval($_GET['schedule_id']);
             $schedule_to_edit = $wpdb->get_row(
-                $wpdb->prepare("SELECT * FROM $table_schedules WHERE id = %d", $schedule_id)
+                $wpdb->prepare("SELECT * FROM " . SCHEDULES_TABLE . " WHERE id = %d", $schedule_id)
             );
+            
         }
 
 
-        $schedules = $wpdb->get_results("SELECT * FROM $table_schedules");
+        $schedules = $wpdb->get_results("SELECT * FROM " . SCHEDULES_TABLE);
+
 
         $this->loadTemplate('schedules-template', [
             'schedules' => $schedules,

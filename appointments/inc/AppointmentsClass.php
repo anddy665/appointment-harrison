@@ -1,20 +1,25 @@
 <?php
 
-require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/interfaces/AppointmentDatabaseInterface.php';
+require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 
 class AppointmentDatabaseHandler implements AppointmentDatabaseInterface
 {
-    public function createTables()
+    private $wpdb;
+
+    public function __construct()
     {
         global $wpdb;
+        $this->wpdb = $wpdb;
+    }
 
-        $table_appointments = MENU_SLUG;
+    public function createTables()
+    {
+        $table_appointments = APPOINTMENTS_TABLE;
         $table_schedules = SCHEDULES_TABLE;
         $table_appointments_schedules = APPOINTMENTS_SCHEDULES_TABLE;
 
-        $charset_collate = $wpdb->get_charset_collate();
-
+        $charset_collate = $this->wpdb->get_charset_collate();
 
         $sql_appointments = "
         CREATE TABLE IF NOT EXISTS $table_appointments (
@@ -30,7 +35,6 @@ class AppointmentDatabaseHandler implements AppointmentDatabaseInterface
         ) $charset_collate;
         ";
 
-
         $sql_schedules = "
         CREATE TABLE IF NOT EXISTS $table_schedules (
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -40,7 +44,6 @@ class AppointmentDatabaseHandler implements AppointmentDatabaseInterface
             PRIMARY KEY (id)
         ) $charset_collate;
         ";
-
 
         $sql_appointments_schedules = "
         CREATE TABLE IF NOT EXISTS $table_appointments_schedules (
@@ -53,7 +56,6 @@ class AppointmentDatabaseHandler implements AppointmentDatabaseInterface
         ) $charset_collate;
         ";
 
-
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql_appointments);
         dbDelta($sql_schedules);
@@ -62,14 +64,11 @@ class AppointmentDatabaseHandler implements AppointmentDatabaseInterface
 
     public function dropTables()
     {
-        global $wpdb;
-
         $table_appointments = APPOINTMENTS_TABLE;
         $table_schedules = SCHEDULES_TABLE;
         $table_appointments_schedules = APPOINTMENTS_SCHEDULES_TABLE;
 
-
         $sql = "DROP TABLE IF EXISTS $table_appointments_schedules, $table_appointments, $table_schedules;";
-        $wpdb->query($sql);
+        $this->wpdb->query($sql);
     }
 }
