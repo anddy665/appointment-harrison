@@ -1,6 +1,7 @@
 <?php
-
+require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 class BaseController
+
 {
     protected $wpdb;
 
@@ -27,7 +28,7 @@ class BaseController
 
     protected function getSchedules()
     {
-        $results = $this->wpdb->get_results("SELECT * FROM {$this->wpdb->prefix}schedules");
+        $results = $this->wpdb->get_results("SELECT * FROM ". SCHEDULES_SLUG);
 
         if ($results === false) {
             error_log('Database query failed in getSchedules.');
