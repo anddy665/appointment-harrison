@@ -83,7 +83,6 @@ class AppointmentFormShortcode
         }
     }
 
-
     public function insertAppointment($full_name, $email, $phone, $appointment_date, $start_time, $end_time, $description)
     {
 

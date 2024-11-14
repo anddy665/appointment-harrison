@@ -10,7 +10,6 @@ class AppointmentHandler
         $this->wpdb = $wpdb;
     }
 
-
     public function handleFormSubmission()
     {
         if (isset($_POST['update_appointment']) && !empty($_POST['edit_id'])) {
@@ -21,7 +20,6 @@ class AppointmentHandler
             $this->deleteAppointment();
         }
     }
-
 
     private function updateAppointment()
     {
@@ -98,8 +96,6 @@ class AppointmentHandler
 
         return $appointments ?: [];
     }
-
-
 
     public function getAppointmentById($id)
     {

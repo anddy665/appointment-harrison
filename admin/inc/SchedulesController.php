@@ -12,20 +12,8 @@ class ScheduleController extends BaseController
 
     public function handleRequest()
     {
-        $action = isset($_POST['action']) ? sanitize_text_field($_POST['action']) : 'createSchedule';
-        $schedule_to_edit = null;
-
-        if ($action === 'editSchedule' && isset($_POST['schedule_id'])) {
-            $schedule_id = intval($_POST['schedule_id']);
-            $schedule_to_edit = $this->wpdb->get_row(
-                $this->wpdb->prepare("SELECT * FROM " . SCHEDULES_TABLE . " WHERE id = %d", $schedule_id)
-            );
-
-            if ($schedule_to_edit === null) {
-                error_log('Failed to retrieve schedule with ID ' . $schedule_id);
-                return;
-            }
-        }
+        $action = $this->determineAction();
+        $schedule_to_edit = $this->getScheduleToEdit($action);
 
         switch ($action) {
             case 'editSchedule':
@@ -41,6 +29,28 @@ class ScheduleController extends BaseController
         }
 
         $this->loadTemplate($action, $schedule_to_edit);
+    }
+
+    private function determineAction()
+    {
+        return isset($_POST['action']) ? sanitize_text_field($_POST['action']) : 'createSchedule';
+    }
+
+    private function getScheduleToEdit($action)
+    {
+        if ($action === 'editSchedule' && isset($_POST['schedule_id'])) {
+            $schedule_id = intval($_POST['schedule_id']);
+            $schedule_to_edit = $this->wpdb->get_row(
+                $this->wpdb->prepare("SELECT * FROM " . SCHEDULES_TABLE . " WHERE id = %d", $schedule_id)
+            );
+
+            if ($schedule_to_edit === null) {
+                error_log('Failed to retrieve schedule with ID ' . $schedule_id);
+            }
+
+            return $schedule_to_edit;
+        }
+        return null;
     }
 
     private function createSchedule()
