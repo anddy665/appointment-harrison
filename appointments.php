@@ -87,18 +87,6 @@ class AppointmentPlugin
         wp_enqueue_script('appointments-admin-script', APPOINTMENTS_PLUGIN_URL . 'admin/assets/js/index.js', array('jquery'), null, true);
     }
 
-    public function addAdminMenu()
-    {
-        add_menu_page(
-            'Appointments',
-            'Appointments',
-            'manage_options',
-            'appointments',
-            [$this, 'renderAppointmentsPage'],
-            'dashicons-calendar-alt',
-            6
-        );
-    }
 
     public function renderAppointmentsPage()
     {
@@ -143,4 +131,3 @@ class AppointmentPlugin
 }
 
 new AppointmentPlugin();
-
