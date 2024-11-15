@@ -1,9 +1,9 @@
 <?php
 
-require_once 'BaseAdminClass.php';
+require_once  APPOINTMENTS_PLUGIN_PATH . 'common/LoadTemplateClass.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 
-class AdminClass extends BaseAdminClass
+class AdminClass extends BaseLoadTemplateClass
 {
     private $dbHandler;
 
