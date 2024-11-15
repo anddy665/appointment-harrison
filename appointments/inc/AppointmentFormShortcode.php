@@ -1,7 +1,9 @@
 <?php
-require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 
-class AppointmentFormShortcode
+require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
+require_once APPOINTMENTS_PLUGIN_PATH . 'common/LoadTemplateClass.php';
+
+class AppointmentFormShortcode extends BaseLoadTemplateClass
 {
     private $wpdb;
 
@@ -26,7 +28,7 @@ class AppointmentFormShortcode
         }
 
         ob_start();
-        include plugin_dir_path(__FILE__) . '../templates/appointment-form-template.php';
+        $this->loadTemplate('appointment-form-template');
         return ob_get_clean();
     }
 
@@ -85,7 +87,6 @@ class AppointmentFormShortcode
 
     public function insertAppointment($full_name, $email, $phone, $appointment_date, $start_time, $end_time, $description)
     {
-
         $table = $this->wpdb->prefix . 'appointments';
 
         $inserted = $this->wpdb->insert(
