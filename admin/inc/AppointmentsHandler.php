@@ -10,16 +10,29 @@ class AppointmentHandler
         $this->wpdb = $wpdb;
     }
 
+
+
     public function handleFormSubmission()
     {
+        $message = '';
+        $class = '';
         if (isset($_POST['update_appointment']) && !empty($_POST['edit_id'])) {
             $this->updateAppointment();
+            $message = 'Appointment updated successfully!';
+            $class = 'notice-success';
         }
 
         if (isset($_GET['action'], $_GET['id']) && $_GET['action'] === 'delete') {
             $this->deleteAppointment();
+            $message = 'Appointment deleted successfully!';
+            $class = 'notice-error';
+        }
+
+        if (!empty($message) && !empty($class)) {
+            include plugin_dir_path(__FILE__) . '../templates/notice-template.php'; 
         }
     }
+
 
     private function updateAppointment()
     {
@@ -36,7 +49,7 @@ class AppointmentHandler
         $start_time = sanitize_text_field($_POST['start_time']);
         $end_time = sanitize_text_field($_POST['end_time']);
         $description = sanitize_textarea_field($_POST['description']);
-        
+
         $updated = $this->wpdb->update(
             APPOINTMENTS_TABLE,
             [
