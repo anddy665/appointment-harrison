@@ -1,7 +1,7 @@
 <?php
 require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 
-class AppointmentHandler
+class AppointmentHandler extends BaseLoadTemplateClass
 {
     private $wpdb;
 
@@ -29,7 +29,7 @@ class AppointmentHandler
         }
 
         if (!empty($message) && !empty($class)) {
-            include plugin_dir_path(__FILE__) . '../templates/notice-template.php'; 
+            $this->loadTemplate('notice-template', ['message' => $message, 'class' => $class]); 
         }
     }
 
