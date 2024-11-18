@@ -15,16 +15,9 @@ class AppointmentFormShortcode extends BaseLoadTemplateClass
 
     public function renderForm()
     {
-        $full_name = '';
-        $email = '';
-        $phone = '';
-        $description = '';
-        $appointment_date = '';
-        $start_time = '';
-        $end_time = '';
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_form_nonce']) && wp_verify_nonce($_POST['appointment_form_nonce'], 'submit_appointment_form')) {
-            $this->handleFormSubmission($full_name, $email, $phone, $description, $appointment_date, $start_time, $end_time);
+            $this->handleFormSubmission();
         }
 
         ob_start();
@@ -32,55 +25,55 @@ class AppointmentFormShortcode extends BaseLoadTemplateClass
         return ob_get_clean();
     }
 
-    private function handleFormSubmission(&$full_name, &$email, &$phone, &$description, &$appointment_date, &$start_time, &$end_time)
+    private function handleFormSubmission()
     {
-        $full_name = sanitize_text_field($_POST['full_name']);
-        $email = sanitize_email($_POST['email']);
-        $phone = sanitize_text_field($_POST['phone']);
-        $description = sanitize_textarea_field($_POST['description']);
-        $appointment_date = sanitize_text_field($_POST['appointment_date']);
-        $start_time = sanitize_text_field($_POST['start_time']);
-        $end_time = sanitize_text_field($_POST['end_time']);
 
-        $day_of_week = date('w', strtotime($appointment_date));
+        $full_name = isset($_POST['full_name']) ? sanitize_text_field($_POST['full_name']) : null;
+        $email = isset($_POST['email']) ? sanitize_email($_POST['email']) : null;
+        $phone = isset($_POST['phone']) ? sanitize_text_field($_POST['phone']) : null;
+        $description = isset($_POST['description']) ? sanitize_textarea_field($_POST['description']) : null;
+        $appointment_date = isset($_POST['appointment_date']) ? sanitize_text_field($_POST['appointment_date']) : null;
+        $start_time = isset($_POST['start_time']) ? sanitize_text_field($_POST['start_time']) : null;
+        $end_time = isset($_POST['end_time']) ? sanitize_text_field($_POST['end_time']) : null;
 
-        $schedule = $this->wpdb->get_row($this->wpdb->prepare(
-            "SELECT id FROM {$this->wpdb->prefix}schedules WHERE schedule_date = %d",
-            $day_of_week
-        ));
 
-        if ($schedule) {
-            $schedule_id = $schedule->id;
+        if ($full_name && $email && $appointment_date && $start_time && $end_time) {
+            $day_of_week = date('w', strtotime($appointment_date));
 
-            $appointment_id = $this->insertAppointment($full_name, $email, $phone, $appointment_date, $start_time, $end_time, $description);
+            $schedule = $this->wpdb->get_row($this->wpdb->prepare(
+                "SELECT id FROM {$this->wpdb->prefix}schedules WHERE schedule_date = %d",
+                $day_of_week
+            ));
 
-            if ($appointment_id) {
-                $inserted = $this->wpdb->insert(
-                    APPOINTMENTS_SCHEDULES_TABLE,
-                    [
-                        'appointment_id' => $appointment_id,
-                        'schedule_id' => $schedule_id
-                    ],
-                    ['%d', '%d']
-                );
+            if ($schedule) {
+                $schedule_id = $schedule->id;
 
-                if ($inserted === false) {
-                    error_log('Failed to link appointment ID ' . $appointment_id . ' with schedule ID ' . $schedule_id);
+                $appointment_id = $this->insertAppointment($full_name, $email, $phone, $appointment_date, $start_time, $end_time, $description);
+
+                if ($appointment_id) {
+                    $inserted = $this->wpdb->insert(
+                        APPOINTMENTS_SCHEDULES_TABLE,
+                        [
+                            'appointment_id' => $appointment_id,
+                            'schedule_id' => $schedule_id
+                        ],
+                        ['%d', '%d']
+                    );
+
+                    if ($inserted === false) {
+                        error_log('Failed to link appointment ID ' . $appointment_id . ' with schedule ID ' . $schedule_id);
+                        return;
+                    }
+                } else {
+                    error_log('Failed to insert appointment.');
                     return;
                 }
-                $full_name = '';
-                $email = '';
-                $phone = '';
-                $description = '';
-                $appointment_date = '';
-                $start_time = '';
-                $end_time = '';
             } else {
-                error_log('Failed to insert appointment.');
+                error_log('No schedule available for the selected date.');
                 return;
             }
         } else {
-            error_log('No schedule available for the selected date.');
+            error_log('Required form fields are missing.');
             return;
         }
     }
