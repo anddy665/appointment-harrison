@@ -41,9 +41,10 @@ class AppointmentFormShortcode extends BaseLoadTemplateClass
             $day_of_week = date('w', strtotime($appointment_date));
 
             $schedule = $this->wpdb->get_row($this->wpdb->prepare(
-                "SELECT id FROM {$this->wpdb->prefix}schedules WHERE schedule_date = %d",
+                'SELECT id FROM ' . SCHEDULES_TABLE . ' WHERE schedule_date = %d',
                 $day_of_week
             ));
+
 
             if ($schedule) {
                 $schedule_id = $schedule->id;
@@ -80,7 +81,7 @@ class AppointmentFormShortcode extends BaseLoadTemplateClass
 
     public function insertAppointment($full_name, $email, $phone, $appointment_date, $start_time, $end_time, $description)
     {
-        $table = $this->wpdb->prefix . 'appointments';
+        $table = APPOINTMENTS_TABLE;
 
         $inserted = $this->wpdb->insert(
             $table,

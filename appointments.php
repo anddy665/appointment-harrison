@@ -36,7 +36,6 @@ class AppointmentPlugin
         $this->registerActivationHooks();
         $this->registerShortcodes();
         $this->registerAdminHooks();
-        $this->registerFormSubmissionHooks();
         new AdminClass($this->dbHandler);
     }
 
@@ -57,10 +56,6 @@ class AppointmentPlugin
         add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
     }
 
-    private function registerFormSubmissionHooks()
-    {
-        add_action('init', [$this, 'handleAppointmentFormSubmission']);
-    }
 
 
     public function createAppointmentsTables()
@@ -100,33 +95,6 @@ class AppointmentPlugin
     {
         $shortcodeHandler = new AppointmentFormShortcode();
         return $shortcodeHandler->renderForm();
-    }
-
-
-    public function handleAppointmentFormSubmission()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_appointment'])) {
-            global $wpdb;
-
-            $full_name = sanitize_text_field($_POST['full_name']);
-            $email = sanitize_email($_POST['email']);
-            $phone = sanitize_text_field($_POST['phone']);
-            $appointment_date = sanitize_text_field($_POST['appointment_date']);
-            $description = sanitize_textarea_field($_POST['description']);
-
-            try {
-                $wpdb->insert(APPOINTMENTS_TABLE, array(
-                    'full_name' => $full_name,
-                    'email' => $email,
-                    'phone' => $phone,
-                    'appointment_date' => $appointment_date,
-                    'description' => $description
-                ));
-            } catch (Exception $e) {
-                error_log('Error inserting appointment: ' . $e->getMessage());
-                return;
-            }
-        }
     }
 }
 
