@@ -29,6 +29,7 @@ class AppointmentPlugin
     {
         $this->dbHandler = new AppointmentDatabaseHandler();
         $this->registerHooks();
+        add_action('wp_enqueue_scripts', [$this, 'enqueueAppointmentScripts']);
     }
 
     private function registerHooks()
@@ -81,6 +82,18 @@ class AppointmentPlugin
         wp_enqueue_style('appointments-admin-style', APPOINTMENTS_PLUGIN_URL . 'admin/assets/style.css');
         wp_enqueue_script('appointments-admin-script', APPOINTMENTS_PLUGIN_URL . 'admin/assets/js/index.js', array('jquery'), null, true);
     }
+
+    public function enqueueAppointmentScripts()
+    {
+        global $wpdb; // Asegúrate de definir $wpdb
+        $schedule_controller = new ScheduleController($wpdb);
+        $schedule_hours = $schedule_controller->loadAvailableSchedules();
+    
+        wp_register_script('appointment-validation-script', APPOINTMENTS_PLUGIN_URL . 'appointments/assets/js/appointment-validation.js', array('jquery'), null, true);
+        wp_localize_script('appointment-validation-script', 'scheduleHoursData', $schedule_hours);
+        wp_enqueue_script('appointment-validation-script');
+    }
+    
 
 
     public function renderAppointmentsPage()
