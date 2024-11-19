@@ -42,26 +42,3 @@ foreach ($schedules as $schedule) {
         <span id="error-text"></span>
     </div>
 </div>
-
-<style>
-    .input-error {
-        border: 2px solid red !important;
-    }
-
-    .error-message {
-        display: none;
-        margin-top: 20px;
-        padding: 15px;
-        border: 1px solid #f5c2c2;
-        border-radius: 5px;
-        background-color: #f8d7da;
-        color: #842029;
-        font-size: 14px;
-        font-weight: bold;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        text-align: center;
-    }
-</style>
-

@@ -107,10 +107,11 @@ class ScheduleController extends BaseController
     }
 
 
-    public function loadAvailableSchedules() {
+    public function loadAvailableSchedules()
+    {
         global $wpdb;
         $schedules = $wpdb->get_results("SELECT id, schedule_date, start_time, end_time FROM " . SCHEDULES_TABLE);
-    
+
         $schedule_hours = [];
         foreach ($schedules as $schedule) {
             $schedule_hours[intval($schedule->schedule_date)] = [
@@ -118,8 +119,7 @@ class ScheduleController extends BaseController
                 'end_time' => $schedule->end_time
             ];
         }
-    
+
         return $schedule_hours;
     }
-    
 }

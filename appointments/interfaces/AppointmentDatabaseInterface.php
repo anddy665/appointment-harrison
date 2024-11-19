@@ -1,5 +1,4 @@
 <?php
-
 interface AppointmentDatabaseInterface
 {
     public function createTables();

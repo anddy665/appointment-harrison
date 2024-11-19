@@ -29,7 +29,7 @@ class AppointmentHandler extends BaseLoadTemplateClass
         }
 
         if (!empty($message) && !empty($class)) {
-            $this->loadTemplate('notice-template', ['message' => $message, 'class' => $class]); 
+            $this->loadTemplate('notice-template', ['message' => $message, 'class' => $class]);
         }
     }
 
