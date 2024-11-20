@@ -1,5 +1,4 @@
 <?php
-
 require_once 'BaseController.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
 
@@ -13,59 +12,51 @@ class ScheduleController extends BaseController
     public function handleRequest()
     {
         $action = $this->determineAction();
-        $schedule_to_edit = $this->getScheduleToEdit($action);
+        $schedule_to_edit = $this->getScheduleToEdit();
 
         switch ($action) {
-            case 'editSchedule':
+            case 'edit_schedule':
                 $this->editSchedule();
                 break;
-            case 'deleteSchedule':
+            case 'delete_schedule':
                 $this->deleteSchedule();
                 break;
-            case 'createSchedule':
-            default:
+            case 'create_schedule':
                 $this->createSchedule();
                 break;
         }
 
-        $this->loadTemplate($action, $schedule_to_edit);
+        return $schedule_to_edit;
     }
 
     private function determineAction()
     {
-        return isset($_POST['action']) ? sanitize_text_field($_POST['action']) : 'createSchedule';
+        return isset($_POST['action']) ? sanitize_text_field($_POST['action']) : null;
     }
 
-    private function getScheduleToEdit($action)
+    private function getScheduleToEdit()
     {
-        if ($action === 'editSchedule' && isset($_POST['schedule_id'])) {
-            $schedule_id = intval($_POST['schedule_id']);
-            $schedule_to_edit = $this->wpdb->get_row(
+        if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['schedule_id'])) {
+            $schedule_id = intval($_GET['schedule_id']);
+            return $this->wpdb->get_row(
                 $this->wpdb->prepare("SELECT * FROM " . SCHEDULES_TABLE . " WHERE id = %d", $schedule_id)
             );
-
-            if ($schedule_to_edit === null) {
-                error_log('Failed to retrieve schedule with ID ' . $schedule_id);
-            }
-
-            return $schedule_to_edit;
         }
         return null;
     }
 
     private function createSchedule()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['schedule_date'])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_schedule_nonce_field']) && wp_verify_nonce($_POST['create_schedule_nonce_field'], 'create_schedule_nonce')) {
             $schedule_data = [
-                'schedule_date' => intval($_POST['schedule_date']),
+                'schedule_date' => sanitize_text_field($_POST['schedule_date']),
                 'start_time' => sanitize_text_field($_POST['start_time']),
                 'end_time' => sanitize_text_field($_POST['end_time']),
             ];
 
             $inserted = $this->wpdb->insert(SCHEDULES_TABLE, $schedule_data);
             if ($inserted === false) {
-                error_log('Failed to create a new schedule.');
-                return;
+                error_log('Failed to create schedule: ' . $this->wpdb->last_error);
             } else {
                 wp_redirect(admin_url('admin.php?page=' . SCHEDULES_SLUG));
             }
@@ -74,18 +65,17 @@ class ScheduleController extends BaseController
 
     private function editSchedule()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['schedule_id'])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_schedule_nonce_field']) && wp_verify_nonce($_POST['edit_schedule_nonce_field'], 'edit_schedule_nonce')) {
             $schedule_id = intval($_POST['schedule_id']);
             $schedule_data = [
-                'schedule_date' => intval($_POST['schedule_date']),
+                'schedule_date' => sanitize_text_field($_POST['schedule_date']),
                 'start_time' => sanitize_text_field($_POST['start_time']),
                 'end_time' => sanitize_text_field($_POST['end_time']),
             ];
 
             $updated = $this->wpdb->update(SCHEDULES_TABLE, $schedule_data, ['id' => $schedule_id]);
             if ($updated === false) {
-                error_log('Failed to update the schedule with ID ' . $schedule_id);
-                return;
+                error_log('Failed to update schedule: ' . $this->wpdb->last_error);
             } else {
                 wp_redirect(admin_url('admin.php?page=' . SCHEDULES_SLUG));
             }
@@ -94,23 +84,20 @@ class ScheduleController extends BaseController
 
     private function deleteSchedule()
     {
-        if (isset($_POST['schedule_id'])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_schedule_nonce_field']) && wp_verify_nonce($_POST['delete_schedule_nonce_field'], 'delete_schedule_nonce')) {
             $schedule_id = intval($_POST['schedule_id']);
             $deleted = $this->wpdb->delete(SCHEDULES_TABLE, ['id' => $schedule_id]);
             if ($deleted === false) {
-                error_log('Failed to delete the schedule with ID ' . $schedule_id);
-                return;
+                error_log('Failed to delete schedule: ' . $this->wpdb->last_error);
             } else {
                 wp_redirect(admin_url('admin.php?page=' . SCHEDULES_SLUG));
             }
         }
     }
 
-
     public function loadAvailableSchedules()
     {
-        global $wpdb;
-        $schedules = $wpdb->get_results("SELECT id, schedule_date, start_time, end_time FROM " . SCHEDULES_TABLE);
+        $schedules = $this->wpdb->get_results("SELECT id, schedule_date, start_time, end_time FROM " . SCHEDULES_TABLE);
 
         $schedule_hours = [];
         foreach ($schedules as $schedule) {

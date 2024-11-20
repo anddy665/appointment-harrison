@@ -101,12 +101,6 @@ class AppointmentPlugin
     }
 
 
-    public function renderAppointmentsPage()
-    {
-        global $wpdb;
-        $schedules_controller = new ScheduleController($wpdb);
-        $schedules_controller->handleRequest();
-    }
 
 
     public function renderAppointmentFormShortcode()

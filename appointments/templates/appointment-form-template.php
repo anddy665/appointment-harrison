@@ -1,22 +1,5 @@
 <?php
-if (!defined('ABSPATH')) {
-    exit;
-}
-
-require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
-
-global $wpdb;
-$schedules = $wpdb->get_results("SELECT id, schedule_date, start_time, end_time FROM " . SCHEDULES_TABLE);
-
-$schedule_hours = [];
-foreach ($schedules as $schedule) {
-    $schedule_hours[intval($schedule->schedule_date)] = [
-        'start_time' => $schedule->start_time,
-        'end_time' => $schedule->end_time
-    ];
-}
 ?>
-
 <div class="wrap">
     <h1>Book an Appointment</h1>
 
