@@ -48,14 +48,7 @@ class AdminClass extends BaseLoadTemplateClass
         );
     }
 
-    public function showNotice($message, $class = 'notice-success')
-    {
-        $args = array(
-            'message' => $message,
-            'class' => $class,
-        );
-        $this->loadTemplate('notice-template', $args);
-    }
+
 
     public function appointmentsPageContent()
     {
