@@ -2,7 +2,7 @@
 
 class BaseLoadTemplateClass
 {
-    protected function loadTemplate($template_name, $args = array())
+    public function loadTemplate($template_name, $args = array())
     {
         if (empty($template_name) || !is_string($template_name)) {
             error_log('Invalid template name provided to loadTemplate.');

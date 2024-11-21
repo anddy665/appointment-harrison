@@ -1,12 +1,15 @@
 <?php
 require_once 'BaseController.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
-
+require_once APPOINTMENTS_PLUGIN_PATH . 'common/LoadTemplateClass.php';
 class ScheduleController extends BaseController
 {
+    private $templateLoader;
+
     public function __construct($wpdb)
     {
         parent::__construct($wpdb);
+        $this->templateLoader = new BaseLoadTemplateClass();
     }
 
     public function handleRequest()
@@ -56,8 +59,10 @@ class ScheduleController extends BaseController
 
             $inserted = $this->wpdb->insert(SCHEDULES_TABLE, $schedule_data);
             if ($inserted === false) {
+                $this->showNotice('Failed to create schedule.', 'notice-error');
                 error_log('Failed to create schedule: ' . $this->wpdb->last_error);
             } else {
+                $this->showNotice('Schedule created successfully.', 'notice-success');
                 wp_redirect(admin_url('admin.php?page=' . SCHEDULES_SLUG));
             }
         }
@@ -75,8 +80,10 @@ class ScheduleController extends BaseController
 
             $updated = $this->wpdb->update(SCHEDULES_TABLE, $schedule_data, ['id' => $schedule_id]);
             if ($updated === false) {
+                $this->showNotice('Failed to update schedule.', 'notice-error');
                 error_log('Failed to update schedule: ' . $this->wpdb->last_error);
             } else {
+                $this->showNotice('Schedule updated successfully.', 'notice-success');
                 wp_redirect(admin_url('admin.php?page=' . SCHEDULES_SLUG));
             }
         }
@@ -88,8 +95,10 @@ class ScheduleController extends BaseController
             $schedule_id = intval($_POST['schedule_id']);
             $deleted = $this->wpdb->delete(SCHEDULES_TABLE, ['id' => $schedule_id]);
             if ($deleted === false) {
+                $this->showNotice('Failed to delete schedule.', 'notice-error');
                 error_log('Failed to delete schedule: ' . $this->wpdb->last_error);
             } else {
+                $this->showNotice('Schedule deleted successfully.', 'notice-success');
                 wp_redirect(admin_url('admin.php?page=' . SCHEDULES_SLUG));
             }
         }
@@ -108,5 +117,14 @@ class ScheduleController extends BaseController
         }
 
         return $schedule_hours;
+    }
+
+    public function showNotice($message, $class = 'notice-success')
+    {
+        $args = array(
+            'message' => $message,
+            'class' => $class,
+        );
+        $this->templateLoader->loadTemplate('notice-template', $args);
     }
 }
