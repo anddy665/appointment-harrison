@@ -1,5 +1,7 @@
-jQuery(document).ready(function($) {
-    setTimeout(function() {
-        $('.notice').fadeOut('slow');
-    }, 1500); 
+jQuery(document).ready(function ($) {
+    let notice = $('.notice');
+
+    $('input').on('focus', function () {
+        notice.stop(true, true).fadeIn('fast');
+    });
 });

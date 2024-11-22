@@ -14,39 +14,68 @@ if (!defined('ABSPATH')) {
 define('APPOINTMENTS_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('APPOINTMENTS_PLUGIN_URL', plugin_dir_url(__FILE__));
 
+require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
+
 require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/AdminClass.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/AppointmentsClass.php';
-require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/SchedulesController.php'; 
+require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/SchedulesController.php';
+require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/AppointmentFormShortcode.php';
 
-class AppointmentsPlugin
+class AppointmentPlugin
 {
     private $dbHandler;
 
     public function __construct()
     {
-        $this->dbHandler = new AppointmentsDatabaseHandler();
-        $this->register_hooks(); 
+        $this->dbHandler = new AppointmentDatabaseHandler();
+        $this->registerHooks();
+        add_action('wp_enqueue_scripts', [$this, 'enqueueAppointmentScripts']);
+        add_action('wp_enqueue_scripts', [$this, 'enqueueAppointmentStyles']);
     }
 
-    private function register_hooks() 
+    private function registerHooks()
     {
-        register_activation_hook(__FILE__, [$this, 'createAppointmentsTables']);
-        register_deactivation_hook(__FILE__, [$this, 'dropAppointmentsTables']);
-
-        add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
-        add_action('admin_menu', [$this, 'addAdminMenu']);
-
+        $this->registerActivationHooks();
+        $this->registerShortcodes();
+        $this->registerAdminHooks();
         new AdminClass($this->dbHandler);
     }
 
+
+    private function registerActivationHooks()
+    {
+        register_activation_hook(__FILE__, [$this, 'createAppointmentsTables']);
+        register_deactivation_hook(__FILE__, [$this, 'dropAppointmentsTables']);
+    }
+
+    private function registerShortcodes()
+    {
+        add_shortcode('appointment_form', [$this, 'renderAppointmentFormShortcode']);
+    }
+
+    private function registerAdminHooks()
+    {
+        add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
+    }
+
+
+
     public function createAppointmentsTables()
     {
-        $this->dbHandler->createTables();
+        try {
+            $this->dbHandler->createTables();
+        } catch (Exception $e) {
+            error_log('Error creating appointment tables: ' . $e->getMessage());
+        }
     }
 
     public function dropAppointmentsTables()
     {
-        $this->dbHandler->dropTables();
+        try {
+            $this->dbHandler->dropTables();
+        } catch (Exception $e) {
+            error_log('Error dropping appointment tables: ' . $e->getMessage());
+        }
     }
 
     public function enqueueAdminScripts($hook)
@@ -55,25 +84,30 @@ class AppointmentsPlugin
         wp_enqueue_script('appointments-admin-script', APPOINTMENTS_PLUGIN_URL . 'admin/assets/js/index.js', array('jquery'), null, true);
     }
 
-    public function addAdminMenu()
+    public function enqueueAppointmentScripts()
     {
-        add_menu_page(
-            'Appointments', 
-            'Appointments', 
-            'manage_options',
-            'appointments', 
-            [$this, 'renderAppointmentsPage'], 
-            'dashicons-calendar-alt',
-            6 
-        );
+        global $wpdb;
+        $schedule_controller = new ScheduleController($wpdb);
+        $schedule_hours = $schedule_controller->loadAvailableSchedules();
+
+        wp_register_script('appointment-validation-script', APPOINTMENTS_PLUGIN_URL . 'appointments/assets/js/appointment-validation.js', array('jquery'), null, true);
+        wp_localize_script('appointment-validation-script', 'scheduleHoursData', $schedule_hours);
+        wp_enqueue_script('appointment-validation-script');
     }
 
-    public function renderAppointmentsPage()
+    public function enqueueAppointmentStyles()
     {
-        global $wpdb; 
-        $schedules_controller = new SchedulesController($wpdb);
-        $schedules_controller->handleRequest(); 
+        wp_enqueue_style('appointment-main-style', APPOINTMENTS_PLUGIN_URL . 'appointments/assets/css/main.css');
+    }
+
+
+
+
+    public function renderAppointmentFormShortcode()
+    {
+        $shortcodeHandler = new AppointmentFormShortcode();
+        return $shortcodeHandler->renderForm();
     }
 }
 
-new AppointmentsPlugin();
+new AppointmentPlugin();
