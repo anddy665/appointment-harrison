@@ -1,4 +1,3 @@
-@charset "UTF-8";
 .input-error {
   border: 2px solid red !important;
 }
@@ -28,7 +27,7 @@
   margin: 0 auto;
   font-family: Arial, sans-serif;
   background: -webkit-gradient(linear, left top, right bottom, from(#bbdefb), to(#90caf9));
-  background: linear-gradient(to bottom right, #bbdefb, #90caf9); /* Azul más intenso */
+  background: linear-gradient(to bottom right, #bbdefb, #90caf9);
   border-radius: 10px;
   padding: 20px;
   -webkit-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
