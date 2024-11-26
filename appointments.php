@@ -79,7 +79,7 @@ class AppointmentPlugin
 
     public function enqueueAdminAssets($hook)
     {
-        // Encolar scripts
+        
         wp_enqueue_script(
             'appointments-admin-script',
             APPOINTMENTS_PLUGIN_URL . 'admin/assets/js/index.js',
@@ -88,7 +88,7 @@ class AppointmentPlugin
             true
         );
 
-        // Encolar estilos
+        
         wp_enqueue_style(
             'appointments-admin-style',
             APPOINTMENTS_PLUGIN_URL . 'admin/assets/css/main.css',

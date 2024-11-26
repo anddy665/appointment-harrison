@@ -1,6 +1,6 @@
 <?php
 ?>
-<div class="wrap">
+<div class="appointment-form-wrapper">
     <h1>Book an Appointment</h1>
 
     <form id="appointment-form" method="POST">
@@ -25,8 +25,6 @@
             <label for="description">Description:</label>
             <textarea id="description" name="description" placeholder="Description"></textarea>
         </div>
-
-
 
         <div class="form-group">
             <label for="start_time">Start Time:</label>
