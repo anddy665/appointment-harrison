@@ -15,7 +15,6 @@ define('APPOINTMENTS_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('APPOINTMENTS_PLUGIN_URL', plugin_dir_url(__FILE__));
 
 require_once APPOINTMENTS_PLUGIN_PATH . 'config.php';
-
 require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/AdminClass.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'appointments/inc/AppointmentsClass.php';
 require_once APPOINTMENTS_PLUGIN_PATH . 'admin/inc/SchedulesController.php';
@@ -31,7 +30,6 @@ class AppointmentPlugin
         $this->registerHooks();
         add_action('wp_enqueue_scripts', [$this, 'enqueueAppointmentScripts']);
         add_action('wp_enqueue_scripts', [$this, 'enqueueAppointmentStyles']);
-        add_action('wp_enqueue_scripts', [$this, 'enqueueAdninStyles']);
     }
 
     private function registerHooks()
@@ -56,7 +54,7 @@ class AppointmentPlugin
 
     private function registerAdminHooks()
     {
-        add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueueAdminAssets']);
     }
 
 
@@ -79,10 +77,26 @@ class AppointmentPlugin
         }
     }
 
-    public function enqueueAdminScripts($hook)
+    public function enqueueAdminAssets($hook)
     {
-        wp_enqueue_script('appointments-admin-script', APPOINTMENTS_PLUGIN_URL . 'admin/assets/js/index.js', array('jquery'), null, true);
+        // Encolar scripts
+        wp_enqueue_script(
+            'appointments-admin-script',
+            APPOINTMENTS_PLUGIN_URL . 'admin/assets/js/index.js',
+            array('jquery'),
+            null,
+            true
+        );
+
+        // Encolar estilos
+        wp_enqueue_style(
+            'appointments-admin-style',
+            APPOINTMENTS_PLUGIN_URL . 'admin/assets/css/main.css',
+            array(),
+            null
+        );
     }
+
 
     public function enqueueAppointmentScripts()
     {
@@ -98,18 +112,7 @@ class AppointmentPlugin
     public function enqueueAppointmentStyles()
     {
         wp_enqueue_style('appointment-main-style', APPOINTMENTS_PLUGIN_URL . 'appointments/assets/css/main.css');
-       
     }
-
-
-    public function enqueueAdninStyles()
-    {
-       
-        wp_enqueue_style('appointment-main-style', APPOINTMENTS_PLUGIN_URL . 'admin/assets/css/main.css');
-    }
-
-
-
 
     public function renderAppointmentFormShortcode()
     {
