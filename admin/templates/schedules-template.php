@@ -30,7 +30,6 @@ $schedules = isset($args['schedules']) ? $args['schedules'] : [];
             <option value="6" <?= isset($schedule_to_edit) && $schedule_to_edit->schedule_date == 6 ? 'selected' : ''; ?>>Saturday</option>
         </select>
 
-
         <div class="time-inputs">
             <div class="time-input-first">
                 <label for="start_time">Start Time:</label>
