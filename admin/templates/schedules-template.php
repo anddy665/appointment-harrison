@@ -7,7 +7,7 @@ $schedule_to_edit = isset($args['schedule_to_edit']) ? $args['schedule_to_edit']
 $schedules = isset($args['schedules']) ? $args['schedules'] : [];
 ?>
 
-<div class="wrap">
+<div class="wrap schedules-page">
     <h1>Schedules Page</h1>
 
     <h2><?= $schedule_to_edit ? 'Edit Schedule' : 'Add New Schedule'; ?></h2>
@@ -31,11 +31,18 @@ $schedules = isset($args['schedules']) ? $args['schedules'] : [];
         </select>
 
 
-        <label for="start_time">Start Time:</label>
-        <input type="time" name="start_time" value="<?= isset($schedule_to_edit) ? esc_attr($schedule_to_edit->start_time) : ''; ?>" required>
+        <div class="time-inputs">
+            <div class="time-input-first">
+                <label for="start_time">Start Time:</label>
+                <input type="time" name="start_time" value="<?= isset($schedule_to_edit) ? esc_attr($schedule_to_edit->start_time) : ''; ?>" required>
+            </div>
 
-        <label for="end_time">End Time:</label>
-        <input type="time" name="end_time" value="<?= isset($schedule_to_edit) ? esc_attr($schedule_to_edit->end_time) : ''; ?>" required>
+            <div class="time-input-second">
+                <label for="end_time">End Time:</label>
+                <input type="time" name="end_time" value="<?= isset($schedule_to_edit) ? esc_attr($schedule_to_edit->end_time) : ''; ?>" required>
+            </div>
+        </div>
+
 
         <button type="submit" class="button button-primary">
             <?= $schedule_to_edit ? 'Edit Schedule' : 'Add Schedule'; ?>

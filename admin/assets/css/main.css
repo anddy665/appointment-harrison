@@ -1,0 +1,128 @@
+.schedules-page {
+  max-width: 800px;
+  margin: 5% auto;
+  background: -webkit-gradient(linear, left top, right bottom, from(#ffffff), to(#f1f8ff));
+  background: linear-gradient(to bottom right, #ffffff, #f1f8ff);
+  border-radius: 10px;
+  padding: 20px;
+  -webkit-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
+}
+.schedules-page h1,
+.schedules-page h2 {
+  text-align: center;
+  color: #0073aa;
+}
+.schedules-page form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 15px;
+}
+.schedules-page form label {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 100%;
+          flex: 1 1 100%;
+  font-weight: bold;
+  color: #0073aa;
+}
+.schedules-page form input[type=time],
+.schedules-page form select,
+.schedules-page form button {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 calc(50% - 10px);
+          flex: 1 1 calc(50% - 10px);
+  padding: 10px;
+  border: 1px solid #11b2ff;
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+          box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+}
+.schedules-page form button {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 100%;
+          flex: 1 1 100%;
+  background-color: #0073aa;
+  color: #fff;
+  cursor: pointer;
+  -webkit-transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
+}
+.schedules-page form button:hover {
+  background-color: #005177;
+}
+.schedules-page form .button-secondary {
+  background-color: #44c3ff;
+  color: #0073aa;
+}
+.schedules-page form .button-secondary:hover {
+  background-color: #11b2ff;
+}
+.schedules-page form .time-inputs {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.schedules-page form .time-input-first {
+  width: 50%;
+}
+.schedules-page form .time-input-second {
+  width: 50%;
+}
+.schedules-page form .time-inputs label {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+}
+.schedules-page form .time-inputs input[type=time] {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  width: 100%;
+}
+.schedules-page table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  text-align: left;
+}
+.schedules-page table th,
+.schedules-page table td {
+  padding: 10px;
+  border: 1px solid #0073aa;
+}
+.schedules-page table thead {
+  background-color: #e5efff;
+}
+.schedules-page table thead th {
+  font-weight: bold;
+  color: #0073aa;
+}
+.schedules-page table tbody tr:nth-child(even) {
+  background-color: #f1f8ff;
+}
+.schedules-page table tbody tr:hover {
+  background-color: white;
+}
+.schedules-page table tbody td button {
+  margin-right: 5px;
+}
+.schedules-page .notice {
+  margin-top: 20px;
+  padding: 15px;
+  font-size: 16px;
+}
+.schedules-page .notice.notice-info {
+  background-color: #f1f8ff;
+  color: #0073aa;
+  border-left: 5px solid #0073aa;
+}
