@@ -1,0 +1,360 @@
+.appointments-page {
+  max-width: 1300px;
+  margin: 5% auto;
+  background: -webkit-gradient(linear, left top, right bottom, from(#ffffff), to(#f1f8ff));
+  background: linear-gradient(to bottom right, #ffffff, #f1f8ff);
+  border-radius: 10px;
+  padding: 20px;
+  -webkit-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
+}
+.appointments-page h1,
+.appointments-page h2 {
+  text-align: center;
+  color: #0073aa;
+  font-weight: 900;
+}
+.appointments-page form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 15px;
+}
+.appointments-page form label {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 100%;
+          flex: 1 1 100%;
+  font-weight: bold;
+  color: #0073aa;
+}
+.appointments-page form input[type=text],
+.appointments-page form input[type=email],
+.appointments-page form input[type=date],
+.appointments-page form input[type=time],
+.appointments-page form textarea {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 calc(50% - 10px);
+          flex: 1 1 calc(50% - 10px);
+  padding: 10px;
+  border: 1px solid #0073aa;
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+          box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  width: 90%;
+}
+.appointments-page form input#appointment_date {
+  width: 50%;
+}
+.appointments-page form input#end_time {
+  width: 50%;
+}
+.appointments-page form button {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 100%;
+          flex: 1 1 100%;
+  background-color: #0073aa;
+  color: #fff;
+  cursor: pointer;
+  -webkit-transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
+}
+.appointments-page form button:hover {
+  background-color: #005177;
+}
+.appointments-page form .form-copule {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.appointments-page form .form-copule-first {
+  width: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.appointments-page form .form-copule-second {
+  width: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.appointments-page form .button-secondary {
+  background-color: #f1f8ff;
+  color: #0073aa;
+}
+.appointments-page form .button-secondary:hover {
+  background-color: #44c3ff;
+}
+.appointments-page form .time-inputs {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.appointments-page form .time-inputs input[type=time] {
+  width: 100%;
+}
+.appointments-page form textarea {
+  width: 100%;
+  height: 100px;
+  resize: vertical;
+}
+.appointments-page form label[for=description] {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
+}
+.appointments-page form #description {
+  width: 100%;
+  height: 120px;
+  padding: 10px;
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  resize: vertical;
+  -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.appointments-page form #description:focus {
+  border-color: #0073aa;
+  outline: none;
+  -webkit-box-shadow: 0 0 5px rgba(0, 115, 170, 0.5);
+          box-shadow: 0 0 5px rgba(0, 115, 170, 0.5);
+}
+.appointments-page form input[type=submit] {
+  background-color: #0073aa;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  -webkit-transition: background-color 0.3s, -webkit-box-shadow 0.3s;
+  transition: background-color 0.3s, -webkit-box-shadow 0.3s;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  transition: background-color 0.3s, box-shadow 0.3s, -webkit-box-shadow 0.3s;
+}
+.appointments-page form .form-botton {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.appointments-page form input[type=submit]:hover {
+  background-color: #005f8d;
+  -webkit-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+.appointments-page form a.button.button-secondary {
+  background-color: #e0e0e0;
+  color: #333;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-left: 10px;
+  -webkit-transition: background-color 0.3s, -webkit-box-shadow 0.3s;
+  transition: background-color 0.3s, -webkit-box-shadow 0.3s;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  transition: background-color 0.3s, box-shadow 0.3s, -webkit-box-shadow 0.3s;
+}
+.appointments-page form a.button.button-secondary:hover {
+  background-color: #d6d6d6;
+  -webkit-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+.appointments-page table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  text-align: left;
+}
+.appointments-page table th,
+.appointments-page table td {
+  padding: 10px;
+  border: 1px solid #0073aa;
+}
+.appointments-page table thead {
+  background-color: #0073aa;
+}
+.appointments-page table thead th {
+  color: #fff;
+}
+.appointments-page table tbody tr:nth-child(even) {
+  background-color: #f1f8ff;
+}
+.appointments-page table tbody td button {
+  margin-right: 5px;
+}
+.appointments-page .notice {
+  margin-top: 20px;
+  padding: 15px;
+  font-size: 16px;
+}
+
+.schedules-page {
+  max-width: 800px;
+  margin: 5% auto;
+  background: -webkit-gradient(linear, left top, right bottom, from(#ffffff), to(#f1f8ff));
+  background: linear-gradient(to bottom right, #ffffff, #f1f8ff);
+  border-radius: 10px;
+  padding: 20px;
+  -webkit-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
+}
+.schedules-page h1,
+.schedules-page h2 {
+  text-align: center;
+  color: #0073aa;
+}
+.schedules-page form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 15px;
+}
+.schedules-page form label {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 100%;
+          flex: 1 1 100%;
+  font-weight: bold;
+  color: #0073aa;
+}
+.schedules-page form input[type=time],
+.schedules-page form select,
+.schedules-page form button {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 calc(50% - 10px);
+          flex: 1 1 calc(50% - 10px);
+  padding: 10px;
+  border: 1px solid rgba(51, 51, 51, 0.1);
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+          box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+}
+.schedules-page form button {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 100%;
+          flex: 1 1 100%;
+  background-color: #0073aa;
+  color: #fff;
+  cursor: pointer;
+  -webkit-transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
+}
+.schedules-page form button:hover {
+  background-color: #005177;
+}
+.schedules-page form .button-secondary {
+  background-color: red;
+  color: white;
+}
+.schedules-page form .button-secondary:hover {
+  background-color: #c0392b;
+  color: white;
+}
+.schedules-page form .time-inputs {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.schedules-page form .time-input-first {
+  width: 50%;
+}
+.schedules-page form .time-input-second {
+  width: 50%;
+}
+.schedules-page form .time-inputs label {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+}
+.schedules-page form .time-inputs input[type=time] {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  width: 100%;
+}
+.schedules-page table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  text-align: left;
+}
+.schedules-page table th,
+.schedules-page table td {
+  padding: 10px;
+  border: 1px solid #0073aa;
+}
+.schedules-page table thead {
+  background-color: #e5efff;
+}
+.schedules-page table thead th {
+  font-weight: bold;
+  color: #0073aa;
+}
+.schedules-page table tbody tr:nth-child(even) {
+  background-color: #f1f8ff;
+}
+.schedules-page table tbody tr:hover {
+  background-color: white;
+}
+.schedules-page table tbody td button {
+  margin-right: 5px;
+}
+.schedules-page .notice {
+  margin-top: 20px;
+  padding: 15px;
+  font-size: 16px;
+}
+.schedules-page .notice.notice-info {
+  background-color: #f1f8ff;
+  color: #0073aa;
+  border-left: 5px solid #0073aa;
+}
