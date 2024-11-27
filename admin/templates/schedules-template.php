@@ -19,6 +19,9 @@ $schedules = isset($args['schedules']) ? $args['schedules'] : [];
             <input type="hidden" name="schedule_id" value="<?= intval($schedule_to_edit->id); ?>">
         <?php endif; ?>
 
+     
+
+        <div class="weekInput">
         <label for="schedule_date">Day of the Week:</label>
         <select name="schedule_date" required>
             <option value="0" <?= isset($schedule_to_edit) && $schedule_to_edit->schedule_date == 0 ? 'selected' : ''; ?>>Sunday</option>
@@ -29,6 +32,7 @@ $schedules = isset($args['schedules']) ? $args['schedules'] : [];
             <option value="5" <?= isset($schedule_to_edit) && $schedule_to_edit->schedule_date == 5 ? 'selected' : ''; ?>>Friday</option>
             <option value="6" <?= isset($schedule_to_edit) && $schedule_to_edit->schedule_date == 6 ? 'selected' : ''; ?>>Saturday</option>
         </select>
+        </div>
 
         <div class="time-inputs">
             <div class="time-input-first">
