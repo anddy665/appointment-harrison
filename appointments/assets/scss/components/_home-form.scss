@@ -1,0 +1,95 @@
+@mixin button-style {
+    background-color: $secondary-color;
+    color: $text-color;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: darken($secondary-color, 10%);
+    }
+}
+
+
+.appointment-form-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom right, #bbdefb, #90caf9);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+    h1 {
+        text-align: center;
+        color: $primary-color;
+        margin-bottom: 20px;
+    }
+
+
+    form#appointment-form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        .form-group {
+            flex: 1 1 calc(50% - 10px);
+            display: flex;
+            flex-direction: column;
+
+            &.full-width {
+                flex: 1 1 100%;
+            }
+
+            label {
+                color: $primary-color;
+                font-weight: bold;
+            }
+
+            input,
+            textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid $input-border-color;
+                border-radius: 5px;
+                box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+                font-size: 16px;
+                margin-top: 5px;
+
+                &:focus {
+                    outline: none;
+                    border-color: $secondary-color;
+                    box-shadow: 0 0 5px rgba($secondary-color, 0.5);
+                }
+            }
+
+            textarea {
+                resize: none;
+                height: 80px;
+            }
+        }
+
+        button {
+            @include button-style;
+            width: 100%;
+        }
+    }
+
+    #error-message {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: $accent-color;
+        color: darken($accent-color, 30%);
+        border: 1px solid $error-border-color;
+        border-radius: 5px;
+        text-align: center;
+        display: none;
+
+        span {
+            font-weight: bold;
+        }
+    }
+}

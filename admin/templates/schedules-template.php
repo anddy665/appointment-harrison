@@ -7,7 +7,7 @@ $schedule_to_edit = isset($args['schedule_to_edit']) ? $args['schedule_to_edit']
 $schedules = isset($args['schedules']) ? $args['schedules'] : [];
 ?>
 
-<div class="wrap">
+<div class="wrap schedules-page">
     <h1>Schedules Page</h1>
 
     <h2><?= $schedule_to_edit ? 'Edit Schedule' : 'Add New Schedule'; ?></h2>
@@ -19,6 +19,9 @@ $schedules = isset($args['schedules']) ? $args['schedules'] : [];
             <input type="hidden" name="schedule_id" value="<?= intval($schedule_to_edit->id); ?>">
         <?php endif; ?>
 
+     
+
+        <div class="weekInput">
         <label for="schedule_date">Day of the Week:</label>
         <select name="schedule_date" required>
             <option value="0" <?= isset($schedule_to_edit) && $schedule_to_edit->schedule_date == 0 ? 'selected' : ''; ?>>Sunday</option>
@@ -29,13 +32,20 @@ $schedules = isset($args['schedules']) ? $args['schedules'] : [];
             <option value="5" <?= isset($schedule_to_edit) && $schedule_to_edit->schedule_date == 5 ? 'selected' : ''; ?>>Friday</option>
             <option value="6" <?= isset($schedule_to_edit) && $schedule_to_edit->schedule_date == 6 ? 'selected' : ''; ?>>Saturday</option>
         </select>
+        </div>
 
+        <div class="time-inputs">
+            <div class="time-input-first">
+                <label for="start_time">Start Time:</label>
+                <input type="time" name="start_time" value="<?= isset($schedule_to_edit) ? esc_attr($schedule_to_edit->start_time) : ''; ?>" required>
+            </div>
 
-        <label for="start_time">Start Time:</label>
-        <input type="time" name="start_time" value="<?= isset($schedule_to_edit) ? esc_attr($schedule_to_edit->start_time) : ''; ?>" required>
+            <div class="time-input-second">
+                <label for="end_time">End Time:</label>
+                <input type="time" name="end_time" value="<?= isset($schedule_to_edit) ? esc_attr($schedule_to_edit->end_time) : ''; ?>" required>
+            </div>
+        </div>
 
-        <label for="end_time">End Time:</label>
-        <input type="time" name="end_time" value="<?= isset($schedule_to_edit) ? esc_attr($schedule_to_edit->end_time) : ''; ?>" required>
 
         <button type="submit" class="button button-primary">
             <?= $schedule_to_edit ? 'Edit Schedule' : 'Add Schedule'; ?>
